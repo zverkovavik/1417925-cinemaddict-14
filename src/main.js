@@ -1,11 +1,12 @@
 import { createMenu } from './view/menu.js';
 import { createUserRank } from './view/user-rank.js';
 import { createShowMoreButton } from './view/show-more-button.js';
-import { createFilmCardContainer, createFilmCard } from './view/film-card.js';
+import { createFilmCardContainer, createFilmCard, generateFilmCard } from './view/film-card.js';
 import { createFilmInfoPopup } from './view/film-info.js';
 
 const FILM_CARD_LIST_COUNT = 5;
 const FILM_CARD_LIST_EXTRA_COUNT = 2;
+const FILM_CARD_QUANTITY = 15;
 
 const headerElement = document.querySelector('.header__logo');
 const mainElement = document.querySelector('.main');
@@ -29,5 +30,6 @@ for (const element of filmCardListExtra) {
     addMarkupComponent(element, createFilmCard(), 'beforeend');
   }
 }
-addMarkupComponent(footerElement, createFilmInfoPopup(), 'afterend');
+// addMarkupComponent(footerElement, createFilmInfoPopup(), 'afterend');
 
+const filmCards = new Array(FILM_CARD_QUANTITY).fill('').map(() => generateFilmCard());
