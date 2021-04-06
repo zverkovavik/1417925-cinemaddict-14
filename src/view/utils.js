@@ -3,9 +3,9 @@ const getRandomInteger = (min, max) => {
   min = Math.ceil(min);
   max = Math.floor(max);
 
-  if (min > max || min < 0 || min === max || max < 0) {
-    throw 'Задан неверный диапазон';
-  }
+  // if (min > max || min < 0 || min === max || max < 0) {
+  //   throw 'Задан неверный диапазон';
+  // }
   return Math.floor(Math.random() * (max - min + 1)) + min;
 };
 

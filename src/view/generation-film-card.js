@@ -1,4 +1,5 @@
-import { getRandomInteger, getRandomArray, getRandomArrayElement, getRandomFloat } from './utils';
+import { getRandomInteger, getRandomArray, getRandomArrayElement, getRandomFloat } from './utils.js';
+// import dayjs from 'dayjs';
 
 const FILM_DESCRIPTIONS = [
   'Lorem ipsum dolor sit amet, consectetur adipiscing elit.',
@@ -34,7 +35,6 @@ const FILM_TITLES = [
   'The man with the golden arm',
 ];
 
-const FILM_DURATIONS = ['1h 32m', '1h 21m', '1h 18m', '1h 59m'];
 const COMMENT_EMOTIONS = ['smile', 'sleeping', 'puke', 'angry'];
 const FILM_GENRES = ['Comedy', 'Drama', 'Musical', 'Mystery', 'Western', 'Cartoon'];
 const FILM_COUNTRY = ['USA', 'Finland', 'France', 'italy', 'Spain'];
@@ -52,11 +52,17 @@ const checkDescriptionLength = (element) => {
   return element.length > 140 ? element.slice(0, 139).concat('...') : element;
 };
 
+const showHoursAndMinutesFilmDuration = (duration) => {
+  const hours = Math.floor(duration/60);
+  const minutes = duration % 60;
+  return `${hours}h ${minutes}m`;
+};
+
 const generateFilmCard = () => {
   const titleFilm = getRandomArrayElement(FILM_TITLES);
   return {
     id: '',
-    comments: [], /* от 0 до 5 */
+    comments: getRandomInteger(0, 5),
     filmInfo: {
       title: titleFilm,
       alternativeTitle: '',
@@ -68,9 +74,9 @@ const generateFilmCard = () => {
       actors: getRandomArrayElement(ACTORS),
       release: {
         date: getRandomInteger(1921, 1960),
-        country: getRandomArrayElement(FILM_COUNTRY),
+        releaseCountry: getRandomArrayElement(FILM_COUNTRY),
       },
-      duration: getRandomArrayElement(FILM_DURATIONS),
+      runtime: showHoursAndMinutesFilmDuration(getRandomInteger(72, 105)),
       genre: getRandomArrayElement(FILM_GENRES), /* должен быть массив случайной длины  от 1 до 3 */
       description: checkDescriptionLength((getRandomArray(FILM_DESCRIPTIONS)).slice(0, getRandomInteger(1, 5)).join(' ')),
     },
