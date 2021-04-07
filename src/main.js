@@ -20,7 +20,7 @@ const addMarkupComponent = (conteiner, template, place) => {
 };
 
 addMarkupComponent(headerElement, createUserRank(), 'beforeend');
-addMarkupComponent(mainElement, createMenu(), 'beforeend');
+addMarkupComponent(mainElement, createMenu(filmCards[0]), 'beforeend');
 addMarkupComponent(mainElement, createFilmCardContainer(), 'beforeend');
 const filmCardList = document.querySelector('.films-list__container');
 for (let i = 0; i < Math.min(filmCards.length, FILM_CARD_PER_STEP); i++) {
@@ -51,6 +51,6 @@ for (const element of filmCardListExtra) {
   }
 }
 
-//   addMarkupComponent(footerElement, createFilmInfoPopup(filmCards[0]), 'afterend');
+addMarkupComponent(footerElement, createFilmInfoPopup(filmCards[0]), 'afterend');
 
 

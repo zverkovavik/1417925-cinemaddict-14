@@ -1,5 +1,4 @@
-import { getRandomInteger, getRandomArray, getRandomArrayElement, getRandomFloat } from './utils.js';
-// import dayjs from 'dayjs';
+import { getRandomInteger, getRandomArray, getRandomArrayElement, getRandomFloat, generateDate, generateCommentDate } from './utils.js';
 
 const FILM_DESCRIPTIONS = [
   'Lorem ipsum dolor sit amet, consectetur adipiscing elit.',
@@ -60,6 +59,7 @@ const showHoursAndMinutesFilmDuration = (duration) => {
 
 const generateFilmCard = () => {
   const titleFilm = getRandomArrayElement(FILM_TITLES);
+  const randomReleaseDate = generateDate();
   return {
     id: '',
     comments: getRandomInteger(0, 5),
@@ -73,12 +73,21 @@ const generateFilmCard = () => {
       writers: getRandomArrayElement(WRITERS),
       actors: getRandomArrayElement(ACTORS),
       release: {
-        date: getRandomInteger(1921, 1960),
+        date: {
+          fullDate: `${randomReleaseDate[1]} ${randomReleaseDate[2]} ${randomReleaseDate[3]}`,
+          year: randomReleaseDate[3],
+        },
         releaseCountry: getRandomArrayElement(FILM_COUNTRY),
       },
       runtime: showHoursAndMinutesFilmDuration(getRandomInteger(72, 105)),
       genre: getRandomArrayElement(FILM_GENRES), /* должен быть массив случайной длины  от 1 до 3 */
       description: checkDescriptionLength((getRandomArray(FILM_DESCRIPTIONS)).slice(0, getRandomInteger(1, 5)).join(' ')),
+    },
+    userDetails: {
+      watchlist: Boolean(getRandomInteger(0, 1)),
+      alreadyWatched: Boolean(getRandomInteger(0, 1)),
+      watchingDate: generateCommentDate(),
+      favorite: Boolean(getRandomInteger(0, 1)),
     },
   };
 };
@@ -88,7 +97,7 @@ const generateFilmComments = () => {
     id: '42',
     author: 'Ilya O\'Reilly',
     comment: 'a film that changed my life, a true masterpiece, post-credit scene was just amazing omg.',
-    date: '2019-05-11T16:12:32.554Z',
+    randomReleaseDate: generateCommentDate(),
     emotion: getRandomArrayElement(COMMENT_EMOTIONS),
   };
 };

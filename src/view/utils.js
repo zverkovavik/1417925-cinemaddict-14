@@ -1,11 +1,11 @@
+import dayjs from 'dayjs';
+const DAYS_GAP = 90;
+
 const getRandomInteger = (min, max) => {
 
   min = Math.ceil(min);
   max = Math.floor(max);
 
-  // if (min > max || min < 0 || min === max || max < 0) {
-  //   throw 'Задан неверный диапазон';
-  // }
   return Math.floor(Math.random() * (max - min + 1)) + min;
 };
 
@@ -35,4 +35,15 @@ const getRandomArrayElement = (elements) => {
   return elements[getRandomInteger(0, elements.length - 1)];
 };
 
-export { getRandomInteger, getRandomArray, getRandomArrayElement, getRandomFloat };
+const generateDate = () => {
+  const numberYearsAgo = getRandomInteger(0, DAYS_GAP);
+  const date = dayjs().add(-numberYearsAgo, 'year').toString().split(' ');
+  return date;
+};
+
+const generateCommentDate = () => {
+  const numberDaysAgo = getRandomInteger(0, DAYS_GAP);
+  return dayjs().add(-numberDaysAgo, 'day').format('YYYY/MM/DD hh:mm');
+};
+
+export { getRandomInteger, getRandomArray, getRandomArrayElement, getRandomFloat, generateDate, generateCommentDate };

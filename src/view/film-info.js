@@ -1,4 +1,4 @@
-export const createFilmInfoPopup = ({ filmInfo: { title, totalRating, poster, ageRating, director, writers, actors, release: { date, releaseCountry }, runtime, genre, description }}) => {
+export const createFilmInfoPopup = ({ filmInfo: { title, totalRating, poster, ageRating, director, writers, actors, release: { date: { fullDate }, releaseCountry }, runtime, genre, description }}) => {
   return `<section class="film-details">
   <form class="film-details__inner" action="" method="get">
     <div class="film-details__top-container">
@@ -39,7 +39,7 @@ export const createFilmInfoPopup = ({ filmInfo: { title, totalRating, poster, ag
             </tr>
             <tr class="film-details__row">
               <td class="film-details__term">Release Date</td>
-              <td class="film-details__cell">30 March ${date}</td>
+              <td class="film-details__cell">${fullDate}</td>
             </tr>
             <tr class="film-details__row">
               <td class="film-details__term">Runtime</td>
