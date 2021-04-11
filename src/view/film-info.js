@@ -1,7 +1,8 @@
+import { createMarkupElement } from './utils.js';
 const FIRST_ARRAY_ELEMENT = 0;
 
-export const createFilmInfoPopup = ({ filmInfo: { title, totalRating, poster, ageRating, director, writers, actors, release: { date: { fullDate }, releaseCountry }, runtime, genre, description }}) => {
-
+const createFilmPopupTemplate = (film) => {
+  const { filmInfo: { title, totalRating, poster, ageRating, director, writers, actors, release: { date: { fullDate }, releaseCountry }, runtime, genre, description }} = film;
 
   return `<section class="film-details">
   <form class="film-details__inner" action="" method="get">
@@ -83,13 +84,25 @@ export const createFilmInfoPopup = ({ filmInfo: { title, totalRating, poster, ag
 
 };
 
-export const createGenre = (genres) => {
-  const genreCell = document.querySelector('.film-details__genre');
-  const genreContainer = genreCell.parentNode;
-  genreContainer.removeChild(genreCell);
-  for (const element of genres) {
-    const genreCellTemplate = genreCell.cloneNode(true);
-    const newGenre = genreContainer.appendChild(genreCellTemplate);
-    newGenre.textContent = element;
+export default class FilmPopup {
+  constructor(film) {
+    this._film = film;
+    this._element = null;
   }
-};
+
+  getTemplate() {
+    return createFilmPopupTemplate(this._film);
+  }
+
+  getElement() {
+    if(!this._element) {
+      this._element = createMarkupElement(this.getTemplate());
+    }
+    return this._element;
+  }
+
+  removeElement() {
+    this._element = null;
+  }
+}
+
