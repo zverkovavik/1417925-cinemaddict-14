@@ -1,4 +1,4 @@
-import { getRandomInteger, getRandomArray, getRandomArrayElement, getRandomFloat, generateDate, generateCommentDate } from './utils.js';
+import { getRandomInteger, getRandomArray, getRandomArrayElement, getRandomFloat, generateDate, generateCommentDate, setSequentialNumber } from './utils.js';
 
 const FILM_DESCRIPTIONS = [
   'Lorem ipsum dolor sit amet, consectetur adipiscing elit.',
@@ -40,6 +40,12 @@ const FILM_COUNTRY = ['USA', 'Finland', 'France', 'italy', 'Spain'];
 const ACTORS = ['Erich von Stroheim, Mary Beth Hughes, Dan Duryea', 'Unknown'];
 const WRITERS = ['Anne Wigton, Heinz Herald, Richard Weil'];
 const DIRECTORS = ['Anthony Mann'];
+const COMMENTS = [
+  'AMAZYNG!',
+  'wonderful',
+  '...',
+  'a film that changed my life, a true masterpiece, post-credit scene was just amazing omg.',
+];
 
 const findPoster = (title) => {
   const substing = title.toLowerCase().split(' ').join('-');
@@ -60,15 +66,16 @@ const showHoursAndMinutesFilmDuration = (duration) => {
 const generateFilmCard = () => {
   const titleFilm = getRandomArrayElement(FILM_TITLES);
   const randomReleaseDate = generateDate();
+  const idNumber = setSequentialNumber();
   return {
-    id: '',
-    comments: getRandomInteger(0, 5),
+    id: idNumber,
+    comments: [idNumber],
     filmInfo: {
       title: titleFilm,
       alternativeTitle: '',
       totalRating: getRandomFloat(5, 9),
       poster: findPoster(titleFilm),
-      ageRating: 0,
+      ageRating: '18+',
       director: getRandomArrayElement(DIRECTORS),
       writers: getRandomArrayElement(WRITERS),
       actors: getRandomArrayElement(ACTORS),
@@ -80,7 +87,7 @@ const generateFilmCard = () => {
         releaseCountry: getRandomArrayElement(FILM_COUNTRY),
       },
       runtime: showHoursAndMinutesFilmDuration(getRandomInteger(72, 105)),
-      genre: getRandomArrayElement(FILM_GENRES), /* должен быть массив случайной длины  от 1 до 3 */
+      genre: getRandomArray(FILM_GENRES, getRandomInteger(1, 3)),
       description: checkDescriptionLength((getRandomArray(FILM_DESCRIPTIONS)).slice(0, getRandomInteger(1, 5)).join(' ')),
     },
     userDetails: {
@@ -94,10 +101,10 @@ const generateFilmCard = () => {
 
 const generateFilmComments = () => {
   return {
-    id: '42',
+    id: setSequentialNumber(),
     author: 'Ilya O\'Reilly',
-    comment: 'a film that changed my life, a true masterpiece, post-credit scene was just amazing omg.',
-    randomReleaseDate: generateCommentDate(),
+    comment: getRandomArrayElement(COMMENTS),
+    date: generateCommentDate(),
     emotion: getRandomArrayElement(COMMENT_EMOTIONS),
   };
 };

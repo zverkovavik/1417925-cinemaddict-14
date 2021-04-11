@@ -25,9 +25,9 @@ const shuffle = (array) => {
   return array;
 };
 
-const getRandomArray = (elements) => {
+const getRandomArray = (elements, arrayLength = elements.length) => {
   const shuffledArray = shuffle(elements.slice());
-  shuffledArray.length = getRandomInteger(1, elements.length);
+  shuffledArray.length = getRandomInteger(1, arrayLength);
   return shuffledArray;
 };
 
@@ -46,4 +46,13 @@ const generateCommentDate = () => {
   return dayjs().add(-numberDaysAgo, 'day').format('YYYY/MM/DD hh:mm');
 };
 
-export { getRandomInteger, getRandomArray, getRandomArrayElement, getRandomFloat, generateDate, generateCommentDate };
+const addMarkupComponent = (conteiner, template, place) => {
+  conteiner.insertAdjacentHTML(place, template);
+};
+
+const setSequentialNumber = () => {
+  let result = 0;
+  return result+=1;
+};
+
+export { getRandomInteger, getRandomArray, getRandomArrayElement, getRandomFloat, generateDate, generateCommentDate, addMarkupComponent, setSequentialNumber };

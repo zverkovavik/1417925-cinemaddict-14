@@ -1,3 +1,4 @@
+const FIRST_ARRAY_ELEMENT = 0;
 const createFilmCardContainer = () => {
   return `<section class="films">
     <section class="films-list">
@@ -28,7 +29,7 @@ const createFilmCard = ({ comments, filmInfo: { title, poster, totalRating, rele
           <p class="film-card__info">
             <span class="film-card__year">${year}</span>
             <span class="film-card__duration">${runtime}</span>
-            <span class="film-card__genre">${genre}</span>
+            <span class="film-card__genre">${genre[FIRST_ARRAY_ELEMENT]}</span>
           </p>
           <img src="${poster}" alt="" class="film-card__poster">
           <p class="film-card__description">${description}</p>
