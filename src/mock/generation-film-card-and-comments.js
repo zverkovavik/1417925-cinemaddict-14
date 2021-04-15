@@ -1,4 +1,4 @@
-import { getRandomInteger, getRandomArray, getRandomArrayElement, getRandomFloat, generateDate, generateCommentDate, setSequentialNumber } from './utils.js';
+import { getRandomInteger, getRandomArray, getRandomArrayElement, getRandomFloat, generateDate, generateCommentDate, setSequentialNumber } from '../view/utils.js';
 
 const FILM_DESCRIPTIONS = [
   'Lorem ipsum dolor sit amet, consectetur adipiscing elit.',

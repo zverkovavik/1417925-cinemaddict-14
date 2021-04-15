@@ -1,29 +1,10 @@
+import { createMarkupElement } from './utils.js';
+
 const FIRST_ARRAY_ELEMENT = 0;
-const createFilmCardContainer = () => {
-  return `<section class="films">
-    <section class="films-list">
-      <h2 class="films-list__title visually-hidden">All movies. Upcoming</h2>
 
-      <div class="films-list__container">
-      </div>
-    </section>
-    <section class="films-list films-list--extra">
-      <h2 class="films-list__title">Top rated</h2>
-
-      <div class="films-list__container">
-      </div>
-    </section>
-
-    <section class="films-list films-list--extra">
-      <h2 class="films-list__title">Most commented</h2>
-
-      <div class="films-list__container">
-      </div>
-    </section>`;
-};
-
-const createFilmCard = ({ comments, filmInfo: { title, poster, totalRating, release: { date: {year} }, runtime, genre, description }}) => {
-  return `        <article class="film-card">
+const createFilmCardTemplate = (film) => {
+  const { comments, filmInfo: { title, poster, totalRating, release: { date: {year} }, runtime, genre, description }} = film;
+  return `<article class="film-card">
           <h3 class="film-card__title">${title}</h3>
           <p class="film-card__rating">${totalRating}</p>
           <p class="film-card__info">
@@ -42,4 +23,24 @@ const createFilmCard = ({ comments, filmInfo: { title, poster, totalRating, rele
         </article>`;
 };
 
-export { createFilmCardContainer, createFilmCard };
+export default class FilmCard {
+  constructor(film) {
+    this._film = film;
+    this._element = null;
+  }
+
+  getTemplate() {
+    return createFilmCardTemplate(this._film);
+  }
+
+  getElement() {
+    if(!this._element) {
+      this._element = createMarkupElement(this.getTemplate());
+    }
+    return this._element;
+  }
+
+  removeElement() {
+    this._element = null;
+  }
+}

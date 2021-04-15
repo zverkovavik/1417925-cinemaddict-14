@@ -1,6 +1,12 @@
 import dayjs from 'dayjs';
 const DAYS_GAP = 90;
 
+export const RenderPosition = {
+  AFTERBEGIN: 'afterbegin',
+  BEFOREEND: 'beforeend',
+  AFTEREND: 'afterend',
+};
+
 const getRandomInteger = (min, max) => {
 
   min = Math.ceil(min);
@@ -46,13 +52,39 @@ const generateCommentDate = () => {
   return dayjs().add(-numberDaysAgo, 'day').format('YYYY/MM/DD hh:mm');
 };
 
-const addMarkupComponent = (conteiner, template, place) => {
-  conteiner.insertAdjacentHTML(place, template);
-};
-
 const setSequentialNumber = () => {
   let result = 0;
   return result+=1;
 };
 
-export { getRandomInteger, getRandomArray, getRandomArrayElement, getRandomFloat, generateDate, generateCommentDate, addMarkupComponent, setSequentialNumber };
+export const renderElement = (container, element, place) => {
+  switch (place) {
+    case RenderPosition.AFTERBEGIN:
+      container.prepend(element);
+      break;
+    case RenderPosition.BEFOREEND:
+      container.append(element);
+      break;
+    case RenderPosition.AFTEREND:
+      container.after(element);
+  }
+};
+
+const createMarkupElement = (template) => {
+  const newElement = document.createElement('div');
+  newElement.innerHTML = template;
+  return newElement.firstChild;
+};
+
+export const createGenre = (genres) => {
+  const genreCell = document.querySelector('.film-details__genre');
+  const genreContainer = genreCell.parentNode;
+  genreContainer.removeChild(genreCell);
+  for (const element of genres) {
+    const genreCellTemplate = genreCell.cloneNode(true);
+    const newGenre = genreContainer.appendChild(genreCellTemplate);
+    newGenre.textContent = element;
+  }
+};
+
+export { getRandomInteger, getRandomArray, getRandomArrayElement, getRandomFloat, generateDate, generateCommentDate, setSequentialNumber, createMarkupElement };
