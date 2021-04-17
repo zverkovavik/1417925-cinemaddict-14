@@ -1,4 +1,4 @@
-import { createMarkupElement } from './utils.js';
+import AbstractView from './abstract.js';
 
 const createCommentFormTemplate = ({ comments }) => {
   return `<div class="film-details__bottom-container">
@@ -42,24 +42,13 @@ const createCommentFormTemplate = ({ comments }) => {
     </div>`;
 };
 
-export default class CommentForm {
+export default class CommentForm extends AbstractView {
   constructor(comments) {
+    super();
     this._comments = comments;
-    this._element = null;
   }
 
   getTemplate() {
     return createCommentFormTemplate(this._comments);
-  }
-
-  getElement() {
-    if(!this._element) {
-      this._element = createMarkupElement(this.getTemplate());
-    }
-    return this._element;
-  }
-
-  removeElement() {
-    this._element = null;
   }
 }
