@@ -1,4 +1,4 @@
-import { createMarkupElement } from './utils.js';
+import AbstractView from './abstract.js';
 
 const createFilmCardContainerTemplate = () => {
   return `<section class="films">
@@ -24,23 +24,8 @@ const createFilmCardContainerTemplate = () => {
   </section>`;
 };
 
-export default class FilmCardContainer {
-  constructor() {
-    this._element = null;
-  }
-
+export default class FilmCardContainer extends AbstractView {
   getTemplate() {
     return createFilmCardContainerTemplate();
-  }
-
-  getElement() {
-    if(!this._element) {
-      this._element = createMarkupElement(this.getTemplate());
-    }
-    return this._element;
-  }
-
-  removeElement() {
-    this._element = null;
   }
 }

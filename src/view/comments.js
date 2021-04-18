@@ -1,4 +1,4 @@
-import { createMarkupElement } from './utils.js';
+import AbstractView from './abstract.js';
 
 export const createCommentTemplate = (comments) => {
   const { author, comment, date, emotion } = comments;
@@ -18,24 +18,13 @@ export const createCommentTemplate = (comments) => {
           </li>`;
 };
 
-export default class Comment {
+export default class Comment extends AbstractView{
   constructor(comments) {
+    super();
     this._comments = comments;
-    this._element = null;
   }
 
   getTemplate() {
     return createCommentTemplate(this._comments);
-  }
-
-  getElement() {
-    if(!this._element) {
-      this._element = createMarkupElement(this.getTemplate());
-    }
-    return this._element;
-  }
-
-  removeElement() {
-    this._element = null;
   }
 }

@@ -1,4 +1,4 @@
-import { createMarkupElement } from './utils.js';
+import AbstractView from './abstract.js';
 
 const createUserRankTemplate = () => {
   return `<section class="header__profile profile">
@@ -6,23 +6,8 @@ const createUserRankTemplate = () => {
     <img class="profile__avatar" src="images/bitmap@2x.png" alt="Avatar" width="35" height="35">
   </section>`;
 };
-export default class UserRank {
-  constructor() {
-    this._element = null;
-  }
-
+export default class UserRank extends AbstractView {
   getTemplate() {
     return createUserRankTemplate();
-  }
-
-  getElement() {
-    if(!this._element) {
-      this._element = createMarkupElement(this.getTemplate());
-    }
-    return this._element;
-  }
-
-  removeElement() {
-    this._element = null;
   }
 }
