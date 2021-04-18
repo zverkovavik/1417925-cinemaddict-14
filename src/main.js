@@ -1,5 +1,5 @@
 import { FilmCardNumber } from './constants.js';
-import { renderElement, RenderPosition, createGenre } from './utils/render.js';
+import { renderElement, RenderPosition, createGenre, isEscEvent } from './utils/render.js';
 import CommentView from './view/comments.js';
 import CommentFormView from './view/comment-form.js';
 import { generateFilmCard, generateFilmComments } from './mock/generation-film-card-and-comments.js';
@@ -32,25 +32,34 @@ const filmList = document.querySelector('.films-list');
 
 const addEventListenerForFilmCard = (filmCardComponent, filmPopupComponent, i) => {
   filmCardComponent.setClickHandler(() => showPopup(filmPopupComponent, i));
-  filmCardComponent.setClickHandler(() => showPopup(filmPopupComponent, i));
-  filmCardComponent.setClickHandler(() => showPopup(filmPopupComponent, i));
-};
 
-const closePopupByCloseButton = (filmPopupComponent) => {
-  footerElement.removeChild(filmPopupComponent.getElement());
-  filmPopupComponent.getElement().remove();
-  bodyElement.classList.remove('hide-overflow');
-};
+  const onEscKeyDown = (evt) => {
+    if (isEscEvent) {
+      evt.preventDefault();
+      closePopup(filmPopupComponent);
+    }
+  };
 
-const showPopup = (filmPopupComponent, i) => {
-  bodyElement.classList.add('hide-overflow');
-  footerElement.appendChild(filmPopupComponent.getElement());
-  createGenre(filmCards[i].filmInfo.genre);
-  const FilmPopupForm = document.querySelector('.film-details__inner');
-  renderElement(FilmPopupForm, new CommentFormView(filmCards[i]).getElement(), RenderPosition.BEFOREEND);
-  const commentList = document.querySelector('.film-details__comments-list');
-  renderElement(commentList, new CommentView(comments[i]).getElement(), RenderPosition.BEFOREEND);
-  filmPopupComponent.setClickHandler(() => closePopupByCloseButton(filmPopupComponent));
+  const closePopup = () => {
+    footerElement.removeChild(filmPopupComponent.getElement());
+    filmPopupComponent.getElement().remove();
+    bodyElement.classList.remove('hide-overflow');
+    document.removeEventListener('keydown', onEscKeyDown);
+  };
+
+  const showPopup = () => {
+    bodyElement.classList.add('hide-overflow');
+    footerElement.appendChild(filmPopupComponent.getElement());
+    createGenre(filmCards[i].filmInfo.genre);
+    const FilmPopupForm = document.querySelector('.film-details__inner');
+    renderElement(FilmPopupForm, new CommentFormView(filmCards[i]).getElement(), RenderPosition.BEFOREEND);
+    const commentList = document.querySelector('.film-details__comments-list');
+    renderElement(commentList, new CommentView(comments[i]).getElement(), RenderPosition.BEFOREEND);
+    document.addEventListener('keydown', onEscKeyDown);
+    filmPopupComponent.setClickHandler(() => {
+      closePopup();
+    });
+  };
 };
 
 for (let i = 0; i < Math.min(filmCards.length, FilmCardNumber.FILM_CARD_PER_STEP); i++) {
@@ -80,6 +89,7 @@ if (filmCards.length > FilmCardNumber.FILM_CARD_PER_STEP) {
 
     if (renderedFilmCardCount >= filmCards.length) {
       showMoreButtonComponent.getElement().remove();
+      showMoreButtonComponent.removeElement();
     }
   });
 }
