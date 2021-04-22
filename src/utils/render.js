@@ -34,17 +34,6 @@ export const createMarkupElement = (template) => {
   return newElement.firstChild;
 };
 
-export const createGenre = (genres) => {
-  const genreCell = document.querySelector('.film-details__genre');
-  const genreContainer = genreCell.parentNode;
-  genreContainer.removeChild(genreCell);
-  for (const child of genres) {
-    const genreCellTemplate = genreCell.cloneNode(true);
-    const newGenre = genreContainer.appendChild(genreCellTemplate);
-    newGenre.textContent = child;
-  }
-};
-
 export const removeComponent = (component) => {
   if(!(component instanceof Abstract)) {
     throw new Error('Can remove only components');

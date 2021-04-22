@@ -27,16 +27,17 @@ export default class FilmCard extends AbstractView {
   constructor(film) {
     super();
     this._film = film;
-    this._clickHandler = this._clickHandler.bind(this);
-    this._alreadyWatchedClickHandler = this._alreadyWatchedClickHandler.bind(this);
+    this._openPopupClickHandler = this._openPopupClickHandler.bind(this);
     this._favoriteClickHandler = this._favoriteClickHandler.bind(this);
     this._watchlistClickHandler = this._watchlistClickHandler.bind(this);
+    this._alreadyWatchedClickHandler = this._alreadyWatchedClickHandler.bind(this);
   }
 
   getTemplate() {
     return createFilmCardTemplate(this._film);
   }
-  _clickHandler() {
+
+  _openPopupClickHandler() {
     this._callback.click();
   }
 
@@ -55,11 +56,11 @@ export default class FilmCard extends AbstractView {
     this._callback.alreadyWatchedClick();
   }
 
-  setClickHandler(callback) {
+  setOpenPopupClickHandler(callback) {
     this._callback.click = callback;
-    this.getElement().querySelector('.film-card__poster').addEventListener('click', this._clickHandler);
-    this.getElement().querySelector('.film-card__title').addEventListener('click', this._clickHandler);
-    this.getElement().querySelector('.film-card__comments').addEventListener('click', this._clickHandler);
+    this.getElement().querySelector('.film-card__poster').addEventListener('click', this._openPopupClickHandler);
+    this.getElement().querySelector('.film-card__title').addEventListener('click', this._openPopupClickHandler);
+    this.getElement().querySelector('.film-card__comments').addEventListener('click', this._openPopupClickHandler);
   }
 
   setFavoriteClickHandler(callback) {
@@ -75,5 +76,14 @@ export default class FilmCard extends AbstractView {
   setAlreadyWatchedClickHandler(callback) {
     this._callback.alreadyWatchedClick = callback;
     this.getElement().querySelector('.film-card__controls-item--mark-as-watched').addEventListener('click', this._alreadyWatchedClickHandler);
+  }
+
+  removeHandlers() {
+    this._callback = {};
+
+    this.getElement().removeEventListener('click', this._openPopupClickHandler);
+    this.getElement().removeEventListener('click', this._watchlistClickHandler);
+    this.getElement().removeEventListener('click', this._alreadyWatchedClickHandler);
+    this.getElement().removeEventListener('click', this._favoriteClickHandler);
   }
 }
