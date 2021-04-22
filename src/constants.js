@@ -3,3 +3,8 @@ export const FilmCardNumber = {
   FILM_CARD_QUANTITY: 20,
   FILM_CARD_PER_STEP: 5,
 };
+
+export const Mode = {
+  DEFAULT: 'DEFAULT',
+  POPUP: 'POPUP',
+};
