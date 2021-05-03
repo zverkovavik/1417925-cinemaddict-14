@@ -1,4 +1,5 @@
 import { getRandomInteger, getRandomArray, getRandomArrayElement, getRandomFloat, generateDate, generateCommentDate, setSequentialNumber } from '../utils/random-number-and-date.js';
+import { nanoid } from 'nanoid';
 
 const FILM_DESCRIPTIONS = [
   'Lorem ipsum dolor sit amet, consectetur adipiscing elit.',
@@ -66,10 +67,10 @@ const showHoursAndMinutesFilmDuration = (duration) => {
 const generateFilmCard = () => {
   const titleFilm = getRandomArrayElement(FILM_TITLES);
   const randomReleaseDate = generateDate();
-  const idNumber = setSequentialNumber();
+  const commentNumber = setSequentialNumber();
   return {
-    id: idNumber,
-    comments: [idNumber],
+    id: nanoid(),
+    comments: [commentNumber],
     filmInfo: {
       title: titleFilm,
       alternativeTitle: '',
@@ -91,10 +92,10 @@ const generateFilmCard = () => {
       description: checkDescriptionLength((getRandomArray(FILM_DESCRIPTIONS)).slice(0, getRandomInteger(1, 5)).join(' ')),
     },
     userDetails: {
-      watchlist: Boolean(getRandomInteger(0, 1)),
-      alreadyWatched: Boolean(getRandomInteger(0, 1)),
+      isInWatchlist: Boolean(getRandomInteger(0, 1)),
+      isAlreadyWatched: Boolean(getRandomInteger(0, 1)),
       watchingDate: generateCommentDate(),
-      favorite: Boolean(getRandomInteger(0, 1)),
+      isFavorite: Boolean(getRandomInteger(0, 1)),
     },
   };
 };
