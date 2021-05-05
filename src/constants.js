@@ -14,3 +14,9 @@ export const SortType = {
   DATE: 'date',
   RATING: 'rating',
 };
+
+export const Title = {
+  ALL: 'All movies. Upcoming',
+  TOP: 'Top rated',
+  MOST: 'Most Commented',
+};
