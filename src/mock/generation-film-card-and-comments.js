@@ -1,6 +1,6 @@
-import { getRandomInteger, getRandomArray, getRandomArrayElement, getRandomFloat, setSequentialNumber } from '../utils/random-number-and-date.js';
+import { getRandomInteger, getRandomArray, getRandomArrayElement, getRandomFloat, setSequentialNumber } from '../utils/random-number-and-date';
 import { nanoid } from 'nanoid';
-import { COMMENT_EMOTIONS } from '../constants.js';
+import { COMMENT_EMOTIONS } from '../constants';
 
 const FILM_DESCRIPTIONS = [
   'Lorem ipsum dolor sit amet, consectetur adipiscing elit.',

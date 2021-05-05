@@ -1,4 +1,4 @@
-import { createMarkupElement } from '../utils/render.js';
+import { createMarkupElement } from '../utils/render';
 
 export default class Abstract {
   constructor() {

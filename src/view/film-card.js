@@ -1,5 +1,6 @@
-import AbstractView from './abstract.js';
+import AbstractView from './abstract';
 import dayjs from 'dayjs';
+import { returnDurationInHoursMinutes } from '../utils/random-number-and-date';
 
 const FIRST_ARRAY_ELEMENT = 0;
 
@@ -10,7 +11,7 @@ const createFilmCardTemplate = (film) => {
           <p class="film-card__rating">${totalRating}</p>
           <p class="film-card__info">
             <span class="film-card__year">${dayjs(date).format('YYYY')}</span>
-            <span class="film-card__duration">${runtime}</span>
+            <span class="film-card__duration">${returnDurationInHoursMinutes(runtime)}</span>
             <span class="film-card__genre">${genre[FIRST_ARRAY_ELEMENT]}</span>
           </p>
           <img src="${poster}" alt="" class="film-card__poster">

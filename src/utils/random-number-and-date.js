@@ -1,3 +1,7 @@
+import dayjs from 'dayjs';
+import objectSupport from 'dayjs/plugin/objectSupport';
+dayjs.extend(objectSupport);
+
 const getRandomInteger = (min, max) => {
 
   min = Math.ceil(min);
@@ -32,11 +36,16 @@ const getRandomArrayElement = (elements) => {
   return elements[getRandomInteger(0, elements.length - 1)];
 };
 
-const isEnterCtrlKeyDown = (evt) => evt.keyCode === 13 && evt.ctrlKey || evt.keyCode == 13 && evt.metaKey ? true : false;
+const isEnterCtrlKeyDown = (evt) => evt.keyCode === 13 && evt.ctrlKey || evt.keyCode == 13 && evt.metaKey;
+const isEscKewDown = (evt) => evt.key === 'Escape' || evt.key === 'Esc';
 
 const setSequentialNumber = () => {
   let result = 0;
   return result+=1;
 };
 
-export { getRandomInteger, getRandomArray, getRandomArrayElement, getRandomFloat, isEnterCtrlKeyDown, setSequentialNumber };
+const returnDurationInHoursMinutes = (duration) => {
+  return dayjs({minute: duration}).format('h[h] mm[m]');
+};
+
+export { getRandomInteger, getRandomArray, getRandomArrayElement, getRandomFloat, isEnterCtrlKeyDown, isEscKewDown, setSequentialNumber, returnDurationInHoursMinutes };

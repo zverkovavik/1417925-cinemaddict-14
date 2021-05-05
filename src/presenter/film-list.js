@@ -1,14 +1,14 @@
 
-import NoFilmsView from '../view/no-films.js';
-import FilterMenuView from '../view/filter-menu.js';
-import SortView from '../view/sort.js';
-import FilmCardContainerView from '../view/film-container.js';
-import ShowMoreButtonView from '../view/show-more-button.js';
-import { render, RenderPosition, removeComponent } from '../utils/render.js';
-import { FilmCardNumber, SortType, Title } from '../constants.js';
-import FilmCardPresenter from './film-card.js';
-import FilmsView from '../view/films.js';
-import { updateItem, sortByDate, sortByRating, sortByComments } from '../utils/common.js';
+import NoFilmsView from '../view/no-films';
+import FilterMenuView from '../view/filter-menu';
+import SortView from '../view/sort';
+import FilmCardContainerView from '../view/film-container';
+import ShowMoreButtonView from '../view/show-more-button';
+import { render, RenderPosition, removeComponent } from '../utils/render';
+import { FilmCardNumber, SortType, Title } from '../constants';
+import FilmCardPresenter from './film-card';
+import FilmsView from '../view/films';
+import { updateItem, sortByDate, sortByRating, sortByComments } from '../utils/common';
 
 export default class FilmList {
   constructor(mainBlock) {

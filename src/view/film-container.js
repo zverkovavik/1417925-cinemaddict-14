@@ -1,4 +1,4 @@
-import AbstractView from './abstract.js';
+import AbstractView from './abstract';
 
 const createFilmCardContainerTemplate = (title, isExtraList = false) => {
   let extraClass = '';
