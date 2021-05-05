@@ -1,5 +1,4 @@
 import FilmCardView from '../view/film-card.js';
-// import CommentView from '../view/comments.js';
 import { render, RenderPosition, removeComponent, addPopup, replace } from '../utils/render.js';
 import FilmPopupView from '../view/film-info.js';
 import { Mode } from '../constants.js';
@@ -46,7 +45,9 @@ export default class FilmCard {
     }
 
     if (this._mode === Mode.POPUP) {
+      const scrollTopPosition = prevFilmPopupComponent.getElement().scrollTop;
       replace(this._filmPopupComponent, prevFilmPopupComponent);
+      this._filmPopupComponent.getElement().scrollTop = scrollTopPosition;
       this._setPopupHandlers();
       document.addEventListener('keydown', this._escKeyDownHandler);
       this._filmPopupComponent.setClosePopupClickHandler(() => {
@@ -109,6 +110,7 @@ export default class FilmCard {
   _showPopup() {
     addPopup(this._filmPopupComponent);
     document.addEventListener('keydown', this._escKeyDownHandler);
+    this._filmPopupComponent.getElement().querySelector('.film-details__comment-input').addEventListener('keydown', this._submitByKeyDownCombinationHadler);
     this._filmPopupComponent.setClosePopupClickHandler(() => {
       this._closePopup();
     });

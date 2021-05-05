@@ -1,10 +1,5 @@
 import AbstractView from './abstract.js';
-
-const Rank = {
-  NOVICE: 'Novice',
-  FAN: 'Fan',
-  BUFF: 'Movie buff',
-};
+import { Rank } from '../constants.js';
 
 const createUserRankTemplate = (films) => {
   const sortedFilms = films.filter((element) => element.userDetails.isAlreadyWatched);
