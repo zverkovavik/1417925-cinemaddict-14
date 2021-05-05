@@ -8,3 +8,15 @@ export const Mode = {
   DEFAULT: 'DEFAULT',
   POPUP: 'POPUP',
 };
+
+export const SortType = {
+  DEFAULT: 'default',
+  DATE: 'date',
+  RATING: 'rating',
+};
+
+export const Title = {
+  ALL: 'All movies. Upcoming',
+  TOP: 'Top rated',
+  MOST: 'Most Commented',
+};

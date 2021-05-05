@@ -1,7 +1,6 @@
 import FilmCardView from '../view/film-card.js';
-import CommentView from '../view/comments.js';
-import CommentFormView from '../view/comment-form.js';
-import { render, RenderPosition, createGenre, removeComponent, addPopup, replace } from '../utils/render.js';
+// import CommentView from '../view/comments.js';
+import { render, RenderPosition, removeComponent, addPopup, replace } from '../utils/render.js';
 import FilmPopupView from '../view/film-info.js';
 import { Mode } from '../constants.js';
 
@@ -14,7 +13,8 @@ export default class FilmCard {
 
     this._filmCardComponent = null;
     this._filmPopupComponent = null;
-    this._filmCardClickHandler = this._filmCardClickHandler.bind(this);
+
+    this._filmCardOpenPopupClickHandler = this._filmCardOpenPopupClickHandler.bind(this);
     this._escKeyDownHandler = this._escKeyDownHandler.bind(this);
     this._handleWatchlistClick = this._handleWatchlistClick.bind(this);
     this._handleAddFavoriteClick = this._handleAddFavoriteClick.bind(this);
@@ -30,16 +30,9 @@ export default class FilmCard {
     const prevFilmPopupComponent = this._filmPopupComponent;
 
     this._filmCardComponent = new FilmCardView(filmCard);
-    this._filmPopupComponent = new FilmPopupView(filmCard);
-    this._commentComponent = new CommentView(this._comments[filmCard.id]);
+    this._filmPopupComponent = new FilmPopupView(filmCard, this._comments[filmCard.comments]);
 
-    this._filmCardComponent.setAlreadyWatchedClickHandler(this._handleAlreadyWatchedClick);
-    this._filmCardComponent.setFavoriteClickHandler(this._handleAddFavoriteClick);
-    this._filmCardComponent.setWatchlistClickHandler(this._handleWatchlistClick);
-
-    this._filmPopupComponent.setAlreadyWatchedClickHandler(this._handleAlreadyWatchedClick);
-    this._filmPopupComponent.setFavoriteClickHandler(this._handleAddFavoriteClick);
-    this._filmPopupComponent.setWatchlistClickHandler(this._handleWatchlistClick);
+    this._setFilmCardHandlers();
 
     if (prevFilmCardComponent === null || prevFilmPopupComponent === null) {
       this._renderFilmCard(container);
@@ -48,11 +41,19 @@ export default class FilmCard {
 
     if (this._container.contains(prevFilmCardComponent.getElement())) {
       replace(this._filmCardComponent, prevFilmCardComponent);
+      this._filmCardOpenPopupClickHandler(this._filmPopupComponent);
+      this._setFilmCardHandlers();
     }
 
     if (this._mode === Mode.POPUP) {
       replace(this._filmPopupComponent, prevFilmPopupComponent);
+      this._setPopupHandlers();
+      document.addEventListener('keydown', this._escKeyDownHandler);
+      this._filmPopupComponent.setClosePopupClickHandler(() => {
+        this._closePopup();
+      });
     }
+
     removeComponent(prevFilmCardComponent);
     removeComponent(prevFilmPopupComponent);
   }
@@ -65,11 +66,30 @@ export default class FilmCard {
 
   destroy() {
     removeComponent(this._filmCardComponent);
-    removeComponent(this._filmPopupComponent);
   }
 
-  _filmCardClickHandler() {
-    this._filmCardComponent.setClickHandler(() => this._showPopup(this._filmPopupComponent));
+  _filmCardOpenPopupClickHandler() {
+    this._filmCardComponent.setOpenPopupClickHandler(() => this._showPopup(this._filmPopupComponent));
+  }
+
+  _setFilmCardHandlers() {
+    this._filmCardComponent.setAlreadyWatchedClickHandler(this._handleAlreadyWatchedClick);
+    this._filmCardComponent.setFavoriteClickHandler(this._handleAddFavoriteClick);
+    this._filmCardComponent.setWatchlistClickHandler(this._handleWatchlistClick);
+  }
+
+  _setPopupHandlers() {
+    this._filmPopupComponent.setAlreadyWatchedClickHandler(this._handleAlreadyWatchedClick);
+    this._filmPopupComponent.setFavoriteClickHandler(this._handleAddFavoriteClick);
+    this._filmPopupComponent.setWatchlistClickHandler(this._handleWatchlistClick);
+  }
+
+  _removeFilmCardHandlers() {
+    this._filmCardComponent.removeHandlers();
+  }
+
+  _removePopupHandlers() {
+    this._filmPopupComponent.removeHandlers();
   }
 
   _escKeyDownHandler(evt) {
@@ -88,22 +108,18 @@ export default class FilmCard {
 
   _showPopup() {
     addPopup(this._filmPopupComponent);
-    createGenre(this._filmCard.filmInfo.genre);
-    const FilmPopupForm = document.querySelector('.film-details__inner');
-    render(FilmPopupForm, new CommentFormView(this._filmCard), RenderPosition.BEFOREEND);
-    const commentList = document.querySelector('.film-details__comments-list');
-    render(commentList, new CommentView(this._comments[this._filmCard.comments]), RenderPosition.BEFOREEND);
     document.addEventListener('keydown', this._escKeyDownHandler);
-    this._filmPopupComponent.setClickHandler(() => {
+    this._filmPopupComponent.setClosePopupClickHandler(() => {
       this._closePopup();
     });
+    this._setPopupHandlers();
     this._changeMode();
-    this._mode = Mode.EDITING;
+    this._mode = Mode.POPUP;
   }
 
   _renderFilmCard(container) {
     render(container, this._filmCardComponent, RenderPosition.BEFOREEND);
-    this._filmCardClickHandler(this._filmCardComponent, this._filmPopupComponent);
+    this._filmCardOpenPopupClickHandler(this._filmPopupComponent);
   }
 
   _handleWatchlistClick() {
@@ -112,9 +128,14 @@ export default class FilmCard {
         {},
         this._filmCard,
         {
-          userDetails: {
-            isInWatchlist: !this._filmCard.userDetails.isInWatchlist,
-          },
+          userDetails:
+          Object.assign(
+            {},
+            this._filmCard.userDetails,
+            {
+              isInWatchlist: !this._filmCard.userDetails.isInWatchlist,
+            },
+          ),
         },
       ),
     );
@@ -127,9 +148,13 @@ export default class FilmCard {
         this._filmCard,
         {
           userDetails:
-          {
-            isFavorite: !this._filmCard.userDetails.isFavorite,
-          },
+          Object.assign(
+            {},
+            this._filmCard.userDetails,
+            {
+              isFavorite: !this._filmCard.userDetails.isFavorite,
+            },
+          ),
         },
       ),
     );
@@ -142,9 +167,13 @@ export default class FilmCard {
         this._filmCard,
         {
           userDetails:
-          {
-            isAlreadyWatched: !this._filmCard.userDetails.isAlreadyWatched,
-          },
+          Object.assign(
+            {},
+            this._filmCard.userDetails,
+            {
+              isAlreadyWatched: !this._filmCard.userDetails.isAlreadyWatched,
+            },
+          ),
         },
       ),
     );

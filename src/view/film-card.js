@@ -3,7 +3,7 @@ import AbstractView from './abstract.js';
 const FIRST_ARRAY_ELEMENT = 0;
 
 const createFilmCardTemplate = (film) => {
-  const { comments, filmInfo: { title, poster, totalRating, release: { date: {year} }, runtime, genre, description }} = film;
+  const { comments, filmInfo: { title, poster, totalRating, release: { date: {year} }, runtime, genre, description }, userDetails: { isInWatchlist, isAlreadyWatched, isFavorite }} = film;
   return `<article class="film-card">
           <h3 class="film-card__title">${title}</h3>
           <p class="film-card__rating">${totalRating}</p>
@@ -16,9 +16,9 @@ const createFilmCardTemplate = (film) => {
           <p class="film-card__description">${description}</p>
           <a class="film-card__comments">${comments} comments</a>
           <div class="film-card__controls">
-            <button class="film-card__controls-item button film-card__controls-item--add-to-watchlist" type="button">Add to watchlist</button>
-            <button class="film-card__controls-item button film-card__controls-item--mark-as-watched" type="button">Mark as watched</button>
-            <button class="film-card__controls-item button film-card__controls-item--favorite" type="button">Mark as favorite</button>
+            <button class="film-card__controls-item ${isInWatchlist ? ' film-card__controls-item--active': ''} button film-card__controls-item--add-to-watchlist" type="button">Add to watchlist</button>
+            <button class="film-card__controls-item ${isAlreadyWatched ? ' film-card__controls-item--active': ''} button film-card__controls-item--mark-as-watched" type="button">Mark as watched</button>
+            <button class="film-card__controls-item ${isFavorite ? ' film-card__controls-item--active': ''} button film-card__controls-item--favorite" type="button">Mark as favorite</button>
           </div>
         </article>`;
 };
@@ -27,16 +27,17 @@ export default class FilmCard extends AbstractView {
   constructor(film) {
     super();
     this._film = film;
-    this._clickHandler = this._clickHandler.bind(this);
-    this._alreadyWatchedClickHandler = this._alreadyWatchedClickHandler.bind(this);
+    this._openPopupClickHandler = this._openPopupClickHandler.bind(this);
     this._favoriteClickHandler = this._favoriteClickHandler.bind(this);
     this._watchlistClickHandler = this._watchlistClickHandler.bind(this);
+    this._alreadyWatchedClickHandler = this._alreadyWatchedClickHandler.bind(this);
   }
 
   getTemplate() {
     return createFilmCardTemplate(this._film);
   }
-  _clickHandler() {
+
+  _openPopupClickHandler() {
     this._callback.click();
   }
 
@@ -55,11 +56,11 @@ export default class FilmCard extends AbstractView {
     this._callback.alreadyWatchedClick();
   }
 
-  setClickHandler(callback) {
+  setOpenPopupClickHandler(callback) {
     this._callback.click = callback;
-    this.getElement().querySelector('.film-card__poster').addEventListener('click', this._clickHandler);
-    this.getElement().querySelector('.film-card__title').addEventListener('click', this._clickHandler);
-    this.getElement().querySelector('.film-card__comments').addEventListener('click', this._clickHandler);
+    this.getElement().querySelector('.film-card__poster').addEventListener('click', this._openPopupClickHandler);
+    this.getElement().querySelector('.film-card__title').addEventListener('click', this._openPopupClickHandler);
+    this.getElement().querySelector('.film-card__comments').addEventListener('click', this._openPopupClickHandler);
   }
 
   setFavoriteClickHandler(callback) {
@@ -75,5 +76,14 @@ export default class FilmCard extends AbstractView {
   setAlreadyWatchedClickHandler(callback) {
     this._callback.alreadyWatchedClick = callback;
     this.getElement().querySelector('.film-card__controls-item--mark-as-watched').addEventListener('click', this._alreadyWatchedClickHandler);
+  }
+
+  removeHandlers() {
+    this._callback = {};
+
+    this.getElement().removeEventListener('click', this._openPopupClickHandler);
+    this.getElement().removeEventListener('click', this._watchlistClickHandler);
+    this.getElement().removeEventListener('click', this._alreadyWatchedClickHandler);
+    this.getElement().removeEventListener('click', this._favoriteClickHandler);
   }
 }
