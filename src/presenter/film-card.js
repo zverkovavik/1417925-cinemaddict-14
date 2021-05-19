@@ -1,8 +1,8 @@
 import FilmCardView from '../view/film-card';
 import { render, RenderPosition, removeComponent, addPopup, replace } from '../utils/render';
 import FilmPopupView from '../view/film-info';
-import { Mode } from '../constants';
-import { isEscKewDown } from '../utils/random-number-and-date';
+import { Mode, UserAction, UpdateType } from '../constants';
+import { isEscKeyDown } from '../utils/random-number-and-date';
 
 const bodyElement = document.querySelector('body');
 export default class FilmCard {
@@ -19,6 +19,7 @@ export default class FilmCard {
     this._handleWatchlistClick = this._handleWatchlistClick.bind(this);
     this._handleAddFavoriteClick = this._handleAddFavoriteClick.bind(this);
     this._handleAlreadyWatchedClick = this._handleAlreadyWatchedClick.bind(this);
+    this._handleDeleteCommentClick = this._handleDeleteCommentClick.bind(this);
     this._mode = Mode.DEFAULT;
   }
 
@@ -84,6 +85,8 @@ export default class FilmCard {
     this._filmPopupComponent.setAlreadyWatchedClickHandler(this._handleAlreadyWatchedClick);
     this._filmPopupComponent.setFavoriteClickHandler(this._handleAddFavoriteClick);
     this._filmPopupComponent.setWatchlistClickHandler(this._handleWatchlistClick);
+    this._filmPopupComponent.setCommentDeleteClickHandler(this._handleDeleteCommentClick);
+    this._filmPopupComponent.setSubmitKeyDownHandler(this._handleSubmitCommentKeyDown);
   }
 
   _removeFilmCardHandlers() {
@@ -95,7 +98,7 @@ export default class FilmCard {
   }
 
   _escKeyDownHandler(evt) {
-    if (isEscKewDown(evt)) {
+    if (isEscKeyDown(evt)) {
       evt.preventDefault();
       this._closePopup(this._filmPopupComponent);
     }
@@ -126,6 +129,8 @@ export default class FilmCard {
 
   _handleWatchlistClick() {
     this._changeData(
+      UserAction.UPDATE_FILM,
+      UpdateType.MINOR,
       Object.assign(
         {},
         this._filmCard,
@@ -145,6 +150,8 @@ export default class FilmCard {
 
   _handleAddFavoriteClick() {
     this._changeData(
+      UserAction.UPDATE_FILM,
+      UpdateType.MINOR,
       Object.assign(
         {},
         this._filmCard,
@@ -164,6 +171,8 @@ export default class FilmCard {
 
   _handleAlreadyWatchedClick() {
     this._changeData(
+      UserAction.UPDATE_FILM,
+      UpdateType.MINOR,
       Object.assign(
         {},
         this._filmCard,
@@ -181,4 +190,18 @@ export default class FilmCard {
     );
   }
 
+  _handleDeleteCommentClick(comment) {
+    this._changeData(
+      UserAction.DELETE_COMMENT,
+      UpdateType.MINOR,
+      comment);
+  }
+
+  _handleSubmitCommentKeyDown(update) {
+    this._changeData(
+      UserAction.ADD_COMMENT,
+      UpdateType.MINOR,
+      update,
+    );
+  }
 }

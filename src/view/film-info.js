@@ -2,6 +2,7 @@ import SmartView from './smart';
 import { COMMENT_EMOTIONS } from '../constants';
 import dayjs from 'dayjs';
 import { isEnterCtrlKeyDown, returnDurationInHoursMinutes } from '../utils/random-number-and-date';
+import he from 'he';
 import relativeTime from 'dayjs/plugin/relativeTime';
 dayjs.extend(relativeTime);
 
@@ -25,7 +26,7 @@ const createFilmPopupTemplate = (film, commentsArr) => {
                 <img src="./images/emoji/${emotion}.png" width="55" height="55" alt="emoji-${emotion}">
               </span>
               <div>
-                <p class="film-details__comment-text">${comment}</p>
+                <p class="film-details__comment-text">${comment.length !== 0 ? he.encode(comment) : ''}}</p>
                 <p class="film-details__comment-info">
                   <span class="film-details__comment-author">${author}</span>
                   <span class="film-details__comment-day">${dayjs(date).fromNow()}</span>
@@ -143,7 +144,7 @@ const createFilmPopupTemplate = (film, commentsArr) => {
           </div>
 
           <label class="film-details__comment-label">
-            <textarea class="film-details__comment-input" placeholder="Select reaction below and write comment here" name="comment">${!currentCommentText ? '' : currentCommentText}</textarea>
+            <textarea class="film-details__comment-input" placeholder="Select reaction below and write comment here" name="comment">${!currentCommentText ? '' : he.encode(currentCommentText)}</textarea>
           </label>
 
           <div class="film-details__emoji-list">
@@ -220,7 +221,7 @@ export default class FilmPopup extends SmartView {
   _commentDeleteHandler(evt) {
     // не реализован
     evt.preventDefault();
-    // удаление формы
+    this._callback.deleteClick(FilmPopup.parseStateToData(this._state));
   }
 
   _submitByKeyDownCombinationHadler (evt) {
@@ -259,7 +260,8 @@ export default class FilmPopup extends SmartView {
     this.getElement().querySelector('.film-details__comment-input').addEventListener('input', this._commentInputHandler);
   }
 
-  setCommentDeleteClickHandler() {
+  setCommentDeleteClickHandler(callback) {
+    this._callback.deleteClick = callback;
     this.getElement().querySelector('.film-details__comment-delete').addEventListener('click', this._commentDeleteHandler);
   }
 

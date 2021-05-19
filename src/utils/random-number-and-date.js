@@ -37,7 +37,7 @@ const getRandomArrayElement = (elements) => {
 };
 
 const isEnterCtrlKeyDown = (evt) => evt.keyCode === 13 && evt.ctrlKey || evt.keyCode == 13 && evt.metaKey;
-const isEscKewDown = (evt) => evt.key === 'Escape' || evt.key === 'Esc';
+const isEscKeyDown = (evt) => evt.key === 'Escape' || evt.key === 'Esc';
 
 const setSequentialNumber = () => {
   let result = 0;
@@ -48,4 +48,4 @@ const returnDurationInHoursMinutes = (duration) => {
   return dayjs({minute: duration}).format('h[h] mm[m]');
 };
 
-export { getRandomInteger, getRandomArray, getRandomArrayElement, getRandomFloat, isEnterCtrlKeyDown, isEscKewDown, setSequentialNumber, returnDurationInHoursMinutes };
+export { getRandomInteger, getRandomArray, getRandomArrayElement, getRandomFloat, isEnterCtrlKeyDown, isEscKeyDown, setSequentialNumber, returnDurationInHoursMinutes };
