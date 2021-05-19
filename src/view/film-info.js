@@ -22,14 +22,14 @@ const createFilmPopupTemplate = (film, commentsArr) => {
     let result = '';
 
     commentsArr.forEach((element) => {
-      const { author, date, emotion, comment } = element;
+      const { id, author, date, emotion, comment } = element;
       const template = `<li class="film-details__comment">
               <span class="film-details__comment-emoji">
                 <img src="./images/emoji/${emotion}.png" width="55" height="55" alt="emoji-${emotion}">
               </span>
               <div>
                 <p class="film-details__comment-text">${comment.length !== 0 ? he.encode(comment) : ''}</p>
-                <p class="film-details__comment-info">
+                <p id=${id} class="film-details__comment-info">
                   <span class="film-details__comment-author">${author}</span>
                   <span class="film-details__comment-day">${dayjs(date).fromNow()}</span>
                   <button class="film-details__comment-delete">Delete</button>
@@ -222,16 +222,15 @@ export default class FilmPopup extends SmartView {
   }
 
   _commentDeleteHandler(evt) {
-    // не реализован
     evt.preventDefault();
-    this._callback.deleteClick(FilmPopup.parseStateToData(this._state));
+    const commentId = evt.target.parentNode.id;
+    this._callback.deleteClick(FilmPopup.parseStateToData(this._state), commentId);
   }
 
   _submitByKeyDownCombinationHadler (evt) {
     if(isEnterCtrlKeyDown(evt)) {
       evt.preventDefault();
-      FilmPopup.parseStateToData(this._state);
-      // отправка формы на сервер
+      this._callback.submitForm(FilmPopup.parseStateToData(this._state));
     }
   }
 
@@ -268,7 +267,8 @@ export default class FilmPopup extends SmartView {
     this.getElement().querySelector('.film-details__comment-delete').addEventListener('click', this._commentDeleteHandler);
   }
 
-  setSubmitKeyDownHandler() {
+  setSubmitKeyDownHandler(callback) {
+    this._callback.submitForm = callback;
     this.getElement().querySelector('.film-details__comment-input').addEventListener('keydown', this._submitByKeyDownCombinationHadler);
   }
 

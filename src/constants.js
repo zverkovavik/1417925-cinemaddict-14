@@ -51,6 +51,15 @@ export const FilterType = {
   FAVORITE: 'Favorites',
   ALREADY_WATCHED: 'History',
   WATCHLIST: 'Watchlist',
+  STATISTICS: 'Statistics',
+};
+
+export const TimeRange = {
+  ALL_TIME: 'all-time',
+  DAY: 'day',
+  WEEK: 'week',
+  MONTH: 'month',
+  YEAR: 'year',
 };
 
 export const FilterName = {

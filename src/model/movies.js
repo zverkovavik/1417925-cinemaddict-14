@@ -35,23 +35,15 @@ export default class Movies extends Observer {
   addComment(updateType, update) {
     this._movies = [
       update,
-      ...this._comments,
+      ...this._movies,
     ];
 
     this._notify(updateType, update);
   }
 
-  deleteComment(updateType, update) {
-    const index = this._movies.findIndex((film) => film.id === update.id);
-
-    if (index === -1) {
-      throw new Error('Can\'t delete unexisting comment');
-    }
-
-    this._movies = [
-      ...this._movies.slice(0, index),
-      ...this._movies.slice(index + 1),
-    ];
+  deleteComment(updateType, update, commentId) {
+    const film = this._movies.find((film) => film.id === update.id);
+    film.comments = film.comments.map((element) => element !== commentId);
 
     this._notify(updateType);
   }

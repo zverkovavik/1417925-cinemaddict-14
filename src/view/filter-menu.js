@@ -12,7 +12,7 @@ const createFilterTemplate = (filterElements, currentFilterType) => {
     <div class="main-navigation__items">
     ${filterElementsTemplate}
     </div>
-    <a href="#stats" class="main-navigation__additional">Stats</a>
+    <a href="#stats" id="Statistics" class="main-navigation__additional ${currentFilterType === 'Statistics' ? 'main-navigation__additional--active' : ''}">Stats</a>
   </nav>`;
 };
 
