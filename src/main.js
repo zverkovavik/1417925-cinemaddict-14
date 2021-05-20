@@ -1,10 +1,10 @@
-import { FilmCardNumber } from './constants.js';
-import { generateFilmCard, generateFilmComments } from './mock/generation-film-card-and-comments.js';
-import { generateFilters } from './generate-filters.js';
-import FilmListPresenter from './presenter/film-list.js';
-import FooterStatisticView from './view/footer-statistics.js';
-import { render, RenderPosition } from './utils/render.js';
-import UserRankView from './view/user-rank.js';
+import { FilmCardNumber } from './constants';
+import { generateFilmCard, generateFilmComments } from './mock/generation-film-card-and-comments';
+import { generateFilters } from './generate-filters';
+import FilmListPresenter from './presenter/film-list';
+import FooterStatisticView from './view/footer-statistics';
+import { render, RenderPosition } from './utils/render';
+import UserRankView from './view/user-rank';
 
 const mainElement = document.querySelector('.main');
 const headerElement = document.querySelector('.header');

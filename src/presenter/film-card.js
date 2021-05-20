@@ -1,7 +1,8 @@
-import FilmCardView from '../view/film-card.js';
-import { render, RenderPosition, removeComponent, addPopup, replace } from '../utils/render.js';
-import FilmPopupView from '../view/film-info.js';
-import { Mode } from '../constants.js';
+import FilmCardView from '../view/film-card';
+import { render, RenderPosition, removeComponent, addPopup, replace } from '../utils/render';
+import FilmPopupView from '../view/film-info';
+import { Mode } from '../constants';
+import { isEscKewDown } from '../utils/random-number-and-date';
 
 const bodyElement = document.querySelector('body');
 export default class FilmCard {
@@ -94,7 +95,7 @@ export default class FilmCard {
   }
 
   _escKeyDownHandler(evt) {
-    if (evt.key === 'Escape' || evt.key === 'Esc') {
+    if (isEscKewDown(evt)) {
       evt.preventDefault();
       this._closePopup(this._filmPopupComponent);
     }
@@ -110,7 +111,6 @@ export default class FilmCard {
   _showPopup() {
     addPopup(this._filmPopupComponent);
     document.addEventListener('keydown', this._escKeyDownHandler);
-    this._filmPopupComponent.getElement().querySelector('.film-details__comment-input').addEventListener('keydown', this._submitByKeyDownCombinationHadler);
     this._filmPopupComponent.setClosePopupClickHandler(() => {
       this._closePopup();
     });

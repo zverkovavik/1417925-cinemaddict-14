@@ -1,4 +1,4 @@
-import AbstractView from './abstract.js';
+import AbstractView from './abstract';
 
 const createFooterStatisticsTemplate = (films) => {
   return `<section class="footer__statistics">

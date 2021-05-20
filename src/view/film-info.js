@@ -1,7 +1,9 @@
-import SmartView from './smart.js';
-import { COMMENT_EMOTIONS } from '../constants.js';
+import SmartView from './smart';
+import { COMMENT_EMOTIONS } from '../constants';
 import dayjs from 'dayjs';
-import { isEnterCtrlKeyDown } from '../utils/random-number-and-date.js';
+import { isEnterCtrlKeyDown, returnDurationInHoursMinutes } from '../utils/random-number-and-date';
+import relativeTime from 'dayjs/plugin/relativeTime';
+dayjs.extend(relativeTime);
 
 const createFilmPopupTemplate = (film, commentsArr) => {
   const { comments, filmInfo: { title, totalRating, poster, ageRating, director, writers, actors, release: { date, releaseCountry }, runtime, genre, description }, userDetails: { isInWatchlist, isAlreadyWatched, isFavorite }, currentCommentEmoji, currentCommentText } = film;
@@ -26,7 +28,7 @@ const createFilmPopupTemplate = (film, commentsArr) => {
                 <p class="film-details__comment-text">${comment}</p>
                 <p class="film-details__comment-info">
                   <span class="film-details__comment-author">${author}</span>
-                  <span class="film-details__comment-day">${dayjs(date).format('YYYY/MM/DD hh:mm')}</span>
+                  <span class="film-details__comment-day">${dayjs(date).fromNow()}</span>
                   <button class="film-details__comment-delete">Delete</button>
                 </p>
               </div>
@@ -95,7 +97,7 @@ const createFilmPopupTemplate = (film, commentsArr) => {
         </tr>
         <tr class="film-details__row">
         <td class="film-details__term">Runtime</td>
-        <td class="film-details__cell">${runtime}</td>
+        <td class="film-details__cell">${returnDurationInHoursMinutes(runtime)}</td>
         </tr>
         <tr class="film-details__row">
         <td class="film-details__term">Country</td>
@@ -206,7 +208,6 @@ export default class FilmPopup extends SmartView {
     this.updateData({
       currentCommentEmoji: emoji,
     });
-    this.getElement().querySelector('#emoji-' + emoji).setAttribute('checked', 'checked');
   }
 
   _commentInputHandler(evt) {
