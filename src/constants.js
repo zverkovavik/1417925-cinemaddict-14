@@ -20,3 +20,15 @@ export const Title = {
   TOP: 'Top rated',
   MOST: 'Most Commented',
 };
+
+export const Rank = {
+  NOVICE: 'Novice',
+  FAN: 'Fan',
+  BUFF: 'Movie buff',
+};
+
+export const COMMENT_EMOTIONS = [
+  'smile',
+  'sleeping',
+  'puke',
+  'angry'];

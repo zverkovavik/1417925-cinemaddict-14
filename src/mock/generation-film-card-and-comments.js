@@ -1,5 +1,6 @@
-import { getRandomInteger, getRandomArray, getRandomArrayElement, getRandomFloat, generateDate, generateCommentDate, setSequentialNumber } from '../utils/random-number-and-date.js';
+import { getRandomInteger, getRandomArray, getRandomArrayElement, getRandomFloat, setSequentialNumber } from '../utils/random-number-and-date.js';
 import { nanoid } from 'nanoid';
+import { COMMENT_EMOTIONS } from '../constants.js';
 
 const FILM_DESCRIPTIONS = [
   'Lorem ipsum dolor sit amet, consectetur adipiscing elit.',
@@ -35,7 +36,6 @@ const FILM_TITLES = [
   'The man with the golden arm',
 ];
 
-const COMMENT_EMOTIONS = ['smile', 'sleeping', 'puke', 'angry'];
 const FILM_GENRES = ['Comedy', 'Drama', 'Musical', 'Mystery', 'Western', 'Cartoon'];
 const FILM_COUNTRY = ['USA', 'Finland', 'France', 'italy', 'Spain'];
 const ACTORS = ['Erich von Stroheim, Mary Beth Hughes, Dan Duryea', 'Unknown'];
@@ -58,15 +58,8 @@ const checkDescriptionLength = (element) => {
   return element.length > 140 ? element.slice(0, 139).concat('...') : element;
 };
 
-const showHoursAndMinutesFilmDuration = (duration) => {
-  const hours = Math.floor(duration/60);
-  const minutes = duration % 60;
-  return `${hours}h ${minutes}m`;
-};
-
 const generateFilmCard = () => {
   const titleFilm = getRandomArrayElement(FILM_TITLES);
-  const randomReleaseDate = generateDate();
   const commentNumber = setSequentialNumber();
   return {
     id: nanoid(),
@@ -81,20 +74,17 @@ const generateFilmCard = () => {
       writers: getRandomArrayElement(WRITERS),
       actors: getRandomArrayElement(ACTORS),
       release: {
-        date: {
-          fullDate: `${randomReleaseDate[1]} ${randomReleaseDate[2]} ${randomReleaseDate[3]}`,
-          year: randomReleaseDate[3],
-        },
+        date: '2019-05-11T00:00:00.000Z',
         releaseCountry: getRandomArrayElement(FILM_COUNTRY),
       },
-      runtime: showHoursAndMinutesFilmDuration(getRandomInteger(72, 105)),
+      runtime: getRandomInteger(72, 105),
       genre: getRandomArray(FILM_GENRES, getRandomInteger(1, 3)),
       description: checkDescriptionLength((getRandomArray(FILM_DESCRIPTIONS)).slice(0, getRandomInteger(1, 5)).join(' ')),
     },
     userDetails: {
       isInWatchlist: Boolean(getRandomInteger(0, 1)),
       isAlreadyWatched: Boolean(getRandomInteger(0, 1)),
-      watchingDate: generateCommentDate(),
+      watchingDate: '2019-04-12T16:12:32.554Z',
       isFavorite: Boolean(getRandomInteger(0, 1)),
     },
   };
@@ -105,7 +95,7 @@ const generateFilmComments = () => {
     id: setSequentialNumber(),
     author: 'Ilya O\'Reilly',
     comment: getRandomArrayElement(COMMENTS),
-    date: generateCommentDate(),
+    date: '2019-05-11T16:12:32.554Z',
     emotion: getRandomArrayElement(COMMENT_EMOTIONS),
   };
 };
