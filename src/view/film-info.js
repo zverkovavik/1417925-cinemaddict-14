@@ -20,13 +20,15 @@ const createFilmPopupTemplate = (film, commentsArr) => {
 
   const createComments = () => {
     let result = '';
-    const { author, comment, date, emotion } = commentsArr;
-    const template = `<li class="film-details__comment">
+
+    commentsArr.forEach((element) => {
+      const { author, date, emotion, comment } = element;
+      const template = `<li class="film-details__comment">
               <span class="film-details__comment-emoji">
                 <img src="./images/emoji/${emotion}.png" width="55" height="55" alt="emoji-${emotion}">
               </span>
               <div>
-                <p class="film-details__comment-text">${comment.length !== 0 ? he.encode(comment) : ''}}</p>
+                <p class="film-details__comment-text">${comment.length !== 0 ? he.encode(comment) : ''}</p>
                 <p class="film-details__comment-info">
                   <span class="film-details__comment-author">${author}</span>
                   <span class="film-details__comment-day">${dayjs(date).fromNow()}</span>
@@ -34,9 +36,11 @@ const createFilmPopupTemplate = (film, commentsArr) => {
                 </p>
               </div>
             </li>`;
-    result = `${result}${template}`;
+      result = `${result}${template}`;
+    });
     return result;
   };
+
   const isEmojiChecked = (element) => {
     if (!currentCommentEmoji) {
       return element === 'smile' ? 'checked' : '';
@@ -135,7 +139,7 @@ const createFilmPopupTemplate = (film, commentsArr) => {
         <h3 class="film-details__comments-title">Comments <span class="film-details__comments-count">${comments.length}</span></h3>
 
         <ul class="film-details__comments-list">
-        ${createComments(commentsArr)}
+        ${createComments()}
         </ul>
 
         <div class="film-details__new-comment">
@@ -159,11 +163,10 @@ const createFilmPopupTemplate = (film, commentsArr) => {
 };
 
 export default class FilmPopup extends SmartView {
-  constructor(film, comment) {
+  constructor(film, comments) {
     super();
-    this._comment = comment;
-    // добавляем карточке фильма флаги состояний - текст комментария и эмодзи
     this._state = FilmPopup.parseDataToState(film);
+    this._comments = comments;
 
     this._closePopupClickHandler = this._closePopupClickHandler.bind(this);
     this._favoriteClickHandler = this._favoriteClickHandler.bind(this);
@@ -173,12 +176,12 @@ export default class FilmPopup extends SmartView {
     this._commentInputHandler = this._commentInputHandler.bind(this);
     this._commentDeleteHandler = this._commentDeleteHandler.bind(this);
     this._submitByKeyDownCombinationHadler = this._submitByKeyDownCombinationHadler.bind(this);
-    // навешиваем обработчики событий
+
     this._setInnerHandlers();
   }
 
   getTemplate() {
-    return createFilmPopupTemplate(this._state, this._comment);
+    return createFilmPopupTemplate(this._state, this._comments);
   }
 
   _closePopupClickHandler(evt) {

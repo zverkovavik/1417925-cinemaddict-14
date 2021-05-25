@@ -1,7 +1,7 @@
 import FilterView from '../view/filter-menu';
 import { render, RenderPosition, replace, removeComponent } from '../utils/render';
 import { filter } from '../utils/filter';
-import { FilterType, UpdateType } from '../constants';
+import { FilterType, UpdateType, FilterName } from '../constants';
 
 export default class Filter {
   constructor(filterContainer, filterModel, moviesModel) {
@@ -52,22 +52,22 @@ export default class Filter {
     return [
       {
         type: FilterType.ALL,
-        name: 'All movies',
+        name: FilterName.ALL,
         count: filter[FilterType.ALL](movies).length,
       },
       {
         type: FilterType.FAVORITE,
-        name: 'Favorites',
+        name: FilterName.FAVORITE,
         count: filter[FilterType.FAVORITE](movies).length,
       },
       {
         type: FilterType.ALREADY_WATCHED,
-        name: 'History',
+        name: FilterName.HISTORY,
         count: filter[FilterType.ALREADY_WATCHED](movies).length,
       },
       {
         type: FilterType.WATCHLIST,
-        name: 'Watchlist',
+        name: FilterName.WATCHLIST,
         count: filter[FilterType.WATCHLIST](movies).length,
       },
     ];

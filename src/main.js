@@ -1,5 +1,4 @@
-import { FilmCardNumber } from './constants';
-import { generateFilmCard, generateFilmComments } from './mock/generation-film-card-and-comments';
+import Api from './api';
 import FilmListPresenter from './presenter/film-list';
 import FilterPresenter from './presenter/filter';
 import FooterStatisticView from './view/footer-statistics';
@@ -8,23 +7,31 @@ import UserRankView from './view/user-rank';
 import MoviesModel from './model/movies';
 import CommentsModel from './model/comments';
 import FilterModel from './model/filters';
+import { UpdateType } from './constants';
 
 const mainElement = document.querySelector('.main');
 const headerElement = document.querySelector('.header');
 const footerElement = document.querySelector('.footer__statistics');
 
-const filmCards = new Array(FilmCardNumber.FILM_CARD_QUANTITY).fill('').map(() => generateFilmCard());
-const comments = new Array(FilmCardNumber.FILM_CARD_QUANTITY).fill('').map(() => generateFilmComments());
+const AUTHORIZATION = 'Basic kd56hd7Pftf03p5';
+const END_POINT = 'https://14.ecmascript.pages.academy/cinemaddict';
+const api = new Api(END_POINT, AUTHORIZATION);
 
 const moviesModel = new MoviesModel();
-moviesModel.setMovies(filmCards);
 const commentsModel = new CommentsModel();
-commentsModel.setComments(comments);
 const filterModel = new FilterModel();
 
+api.getMovies()
+  .then((movies) => {
+    moviesModel.setMovies(UpdateType.INIT, movies);
+
+    render(headerElement, new UserRankView(movies), RenderPosition.BEFOREEND);
+    render(footerElement, new FooterStatisticView(movies), RenderPosition.BEFOREEND);
+  })
+  .catch(moviesModel.setMovies(UpdateType.INIT, []));
+
 const filterPresenter = new FilterPresenter(mainElement, filterModel, moviesModel);
-const filmListPresenter = new FilmListPresenter(mainElement, moviesModel, commentsModel, filterModel);
+const filmListPresenter = new FilmListPresenter(mainElement, moviesModel, commentsModel, filterModel, api);
 filterPresenter.init();
 filmListPresenter.init();
-render(headerElement, new UserRankView(filmCards), RenderPosition.BEFOREEND);
-render(footerElement, new FooterStatisticView(filmCards), RenderPosition.BEFOREEND);
+
