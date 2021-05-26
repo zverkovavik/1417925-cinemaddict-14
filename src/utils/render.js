@@ -35,6 +35,10 @@ export const createMarkupElement = (template) => {
 };
 
 export const removeComponent = (component) => {
+  if (component === null) {
+    return;
+  }
+
   if(!(component instanceof Abstract)) {
     throw new Error('Can remove only components');
   }
