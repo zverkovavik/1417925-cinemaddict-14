@@ -3,6 +3,9 @@ import dayjs from 'dayjs';
 import { returnDurationInHoursMinutes } from '../utils/random-number-and-date';
 
 const FIRST_ARRAY_ELEMENT = 0;
+const checkDescriptionLength = (element) => {
+  return element.length > 140 ? element.slice(0, 139).concat('...') : element;
+};
 
 const createFilmCardTemplate = (film) => {
   const { comments, filmInfo: { title, poster, totalRating, release: { date }, runtime, genre, description }, userDetails: { isInWatchlist, isAlreadyWatched, isFavorite }} = film;
@@ -15,8 +18,8 @@ const createFilmCardTemplate = (film) => {
             <span class="film-card__genre">${genre[FIRST_ARRAY_ELEMENT]}</span>
           </p>
           <img src="${poster}" alt="" class="film-card__poster">
-          <p class="film-card__description">${description}</p>
-          <a class="film-card__comments">${comments} comments</a>
+          <p class="film-card__description">${checkDescriptionLength(description)}</p>
+          <a class="film-card__comments">${comments.length} comments</a>
           <div class="film-card__controls">
             <button class="film-card__controls-item ${isInWatchlist ? ' film-card__controls-item--active': ''} button film-card__controls-item--add-to-watchlist" type="button">Add to watchlist</button>
             <button class="film-card__controls-item ${isAlreadyWatched ? ' film-card__controls-item--active': ''} button film-card__controls-item--mark-as-watched" type="button">Mark as watched</button>

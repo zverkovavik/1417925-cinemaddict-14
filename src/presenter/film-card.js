@@ -3,13 +3,15 @@ import { render, RenderPosition, removeComponent, addPopup, replace } from '../u
 import FilmPopupView from '../view/film-info';
 import { Mode, UserAction, UpdateType } from '../constants';
 import { isEscKeyDown } from '../utils/random-number-and-date';
+import CommentsModel from '../model/comments';
 
 const bodyElement = document.querySelector('body');
 export default class FilmCard {
-  constructor(filmCardListContainer, changeData, changeMode) {
+  constructor(filmCardListContainer, changeData, changeMode, api) {
     this._container = filmCardListContainer;
     this._changeData = changeData;
     this._changeMode = changeMode;
+    this._api = api;
 
     this._filmCardComponent = null;
     this._filmPopupComponent = null;
@@ -23,15 +25,18 @@ export default class FilmCard {
     this._mode = Mode.DEFAULT;
   }
 
-  init(filmCard, container, comments) {
+  init(filmCard, container) {
+    this._commentsModel = new CommentsModel();
     this._filmCard = filmCard;
-    this._comments = comments;
-
+    this._comments = null;
     const prevFilmCardComponent = this._filmCardComponent;
     const prevFilmPopupComponent = this._filmPopupComponent;
 
+    this._api.getComments(filmCard.id).then((comments) => {
+      this._commentsModel.setComments(comments);
+      this._filmPopupComponent = new FilmPopupView(filmCard, comments);
+    });
     this._filmCardComponent = new FilmCardView(filmCard);
-    this._filmPopupComponent = new FilmPopupView(filmCard, this._comments[filmCard.comments]);
 
     this._setFilmCardHandlers();
 

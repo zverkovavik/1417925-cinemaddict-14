@@ -43,11 +43,19 @@ export const UpdateType = {
   PATCH: 'PATCH',
   MINOR: 'MINOR',
   MAJOR: 'MAJOR',
+  INIT: 'INIT',
 };
 
 export const FilterType = {
   ALL: 'All_movies',
   FAVORITE: 'Favorites',
   ALREADY_WATCHED: 'History',
+  WATCHLIST: 'Watchlist',
+};
+
+export const FilterName = {
+  ALL: 'All movies',
+  FAVORITE: 'Favorites',
+  HISTORY: 'History',
   WATCHLIST: 'Watchlist',
 };
