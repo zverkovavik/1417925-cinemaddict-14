@@ -3,8 +3,9 @@ import NoFilmsView from '../view/no-films';
 import SortView from '../view/sort';
 import FilmCardContainerView from '../view/film-container';
 import ShowMoreButtonView from '../view/show-more-button';
-import { render, RenderPosition, removeComponent } from '../utils/render';
-import { FilmCardNumber, SortType, Title,  UserAction, UpdateType } from '../constants';
+import UserStaticticsView from '../view/user-statictics';
+import { render, RenderPosition, removeComponent, replace } from '../utils/render';
+import { FilmCardNumber, SortType, Title,  UserAction, UpdateType, FilterType } from '../constants';
 import FilmCardPresenter from './film-card';
 import FilmsView from '../view/films';
 import { sortByDate, sortByRating, sortByComments } from '../utils/common';
@@ -12,11 +13,10 @@ import { filter } from '../utils/filter';
 import LoadingView from '../view/loading';
 
 export default class FilmList {
-  constructor(mainBlock, moviesModel, commentsModel, filterModel, api) {
+  constructor(mainBlock, moviesModel, filterModel, api) {
 
     this._mainBlock = mainBlock;
     this._moviesModel = moviesModel;
-    this._commentsModel = commentsModel;
     this._filterModel = filterModel;
     this._api = api;
 
@@ -24,6 +24,7 @@ export default class FilmList {
     this._showMoreButtonComponent = null;
     this._topRatedFilmListComponent = null;
     this._mostCommentedFilmListComponent = null;
+    this._userStatsComponent = null;
 
     this._noFilmComponent = new NoFilmsView();
     this._filmsComponent = new FilmsView();
@@ -32,13 +33,11 @@ export default class FilmList {
 
     this._handleShowMoreButtonClick = this._handleShowMoreButtonClick.bind(this);
     this._handleModeChange = this._handleModeChange.bind(this);
-
     this._handleViewAction = this._handleViewAction.bind(this);
     this._handleModelEvent = this._handleModelEvent.bind(this);
     this._handleSortTypeChange = this._handleSortTypeChange.bind(this);
 
     this._filterModel.addObserver(this._handleModelEvent);
-    this._commentsModel.addObserver(this._handleModelEvent);
     this._moviesModel.addObserver(this._handleModelEvent);
 
     this._renderedFilmCardCount = FilmCardNumber.FILM_CARD_PER_STEP;
@@ -83,11 +82,7 @@ export default class FilmList {
     this._sortComponent.setSortTypeChangeHandler(this._handleSortTypeChange);
   }
 
-  _handleViewAction(actionType, updateType, update) {
-    // Здесь будем вызывать обновление модели.
-    // actionType - действие пользователя, нужно чтобы понять, какой метод модели вызвать
-    // updateType - тип изменений, нужно чтобы понять, что после нужно обновить
-    // update - обновленные данные
+  _handleViewAction(actionType, updateType, update, id = null) {
     switch (actionType) {
       case UserAction.UPDATE_FILM:
         this._api.updateMovie(update).then((response) => {
@@ -95,35 +90,37 @@ export default class FilmList {
         });
         break;
       case UserAction.ADD_COMMENT:
-        this._moviesModel.addComment(updateType, update);
-        // this._commentsModel.addComment(updateType, update);
+        this._api.addComment(update, id).then((response) => {
+          // console.log(response);
+          this._moviesModel.addComment(updateType, response);
+        });
+        // console.log(update);
         break;
       case UserAction.DELETE_COMMENT:
-        this._moviesModel.deleteComment(updateType, update);
-        // this._commentsModel.deleteComment(updateType, update);
+        this._api.deleteComment(id).then(() => {
+          this._moviesModel.deleteComment(updateType, update, id);
+        });
         break;
     }
   }
 
   _handleModelEvent(updateType, data) {
-    // В зависимости от типа изменений решаем, что делать:
-    // - обновить одну карточку
-    // - обновить список (мы в фильтре - и изменяем значение этого фильтра)
-    // - обновить всю доску (например, при переключении фильтра)
     switch (updateType) {
       case UpdateType.PATCH:
-        // - обновить одну карточку
-        this._filmCardPresenter[data.id].init(data);
+        this._filmCardPresenter[data.id].init(data, this._filmCardContainer);
         break;
       case UpdateType.MINOR:
-        // - обновить список (мы в фильтре - и изменяем значение этого фильтра)
-        this._clearBoard();
+        this.clearBoard();
         this._renderBoard();
         break;
       case UpdateType.MAJOR:
-        this._clearBoard({resetRenderedFilmCount: true, _currentSortType: true});
+        this.clearBoard({resetRenderedFilmCount: true, _currentSortType: true});
+        if(this._filterModel.getFilter() === FilterType.STATISTICS) {
+          this._renderStats();
+          return;
+        }
         this._renderBoard();
-        // - обновить всю доску (например, при переключении фильтра)
+
         break;
       case UpdateType.INIT:
         this._isLoading = false;
@@ -141,6 +138,18 @@ export default class FilmList {
 
   _renderFilmCards(films, container) {
     films.forEach((filmCard) => this._renderFilmCard(filmCard, container));
+  }
+
+  _renderStats() {
+    const prevStatsComponent = this._userStatsComponent;
+    this._userStatsComponent = new UserStaticticsView(this._moviesModel.getMovies());
+    if (prevStatsComponent === null) {
+      render(this._mainBlock, this._userStatsComponent, RenderPosition.BEFOREEND);
+
+      return;
+    }
+    replace(this._userStatsComponent, prevStatsComponent);
+    removeComponent(prevStatsComponent);
   }
 
   _renderNoFilms() {
@@ -169,7 +178,7 @@ export default class FilmList {
     }
 
     this._currentSortType = sortType;
-    this._clearBoard({resetRenderedFilmCount: true});
+    this.clearBoard({resetRenderedFilmCount: true});
     this._renderBoard();
   }
 
@@ -235,7 +244,7 @@ export default class FilmList {
     render(this._filmsBlockContainer, this._mostCommentedFilmListComponent, RenderPosition.BEFOREEND);
   }
 
-  _clearBoard({resetRenderedFilmCount = false, resetSortType = false} = {}) {
+  clearBoard({resetRenderedFilmCount = false, resetSortType = false} = {}) {
     const filmCount = this._getMovies().length;
 
     Object.values(this._filmCardPresenter)
@@ -247,6 +256,7 @@ export default class FilmList {
     removeComponent(this._topRatedFilmListComponent);
     removeComponent(this._mostCommentedFilmListComponent);
     removeComponent(this._loadingComponent);
+    removeComponent(this._userStatsComponent);
 
     if (resetRenderedFilmCount) {
       this._renderedFilmCardCount = FilmCardNumber.FILM_CARD_PER_STEP;

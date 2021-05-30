@@ -42,10 +42,8 @@ export default class Filter {
     if (this._filterModel.getFilter() === filterType) {
       return;
     }
-
     this._filterModel.setFilter(UpdateType.MAJOR, filterType);
   }
-
   _getFilters() {
     const movies = this._moviesModel.getMovies();
 

@@ -5,5 +5,6 @@ export const filter = {
   [FilterType.WATCHLIST]: (films) => films.filter((film) => film.userDetails.isInWatchlist),
   [FilterType.ALREADY_WATCHED]: (films) => films.filter((film) => film.userDetails.isAlreadyWatched),
   [FilterType.FAVORITE]: (films) => films.filter((film) => film.userDetails.isFavorite),
+  [FilterType.STATISTICS]: (films) => films,
 };
 
