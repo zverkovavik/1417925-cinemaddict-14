@@ -68,3 +68,9 @@ export const FilterName = {
   HISTORY: 'History',
   WATCHLIST: 'Watchlist',
 };
+
+export const State = {
+  SAVING: 'SAVING',
+  DELETING: 'DELETING',
+  ABORTING: 'ABORTING',
+};

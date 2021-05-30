@@ -1,6 +1,8 @@
 import { TimeRange } from '../constants';
 import dayjs from 'dayjs';
 
+const SHAKE_ANIMATION_TIMEOUT = 600;
+
 export const sortByDate = (dateA, dateB) => {
   return dayjs(dateB.filmInfo.release.date).diff(dayjs(dateA.filmInfo.release.date));
 };
@@ -52,4 +54,9 @@ export const isWatchingDateInto = (films, range) => {
       return dayjs(film.userDetails.watchingDate).isSame(now, range);
     });
   return result;
+};
+
+export const shake = (element) => {
+  element.classList.add('shake');
+  setTimeout(() => element.classList.remove('shake'), SHAKE_ANIMATION_TIMEOUT);
 };

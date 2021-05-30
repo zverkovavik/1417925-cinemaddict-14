@@ -56,9 +56,13 @@ export default class Api {
       .catch(Api.catchError);
   }
 
-  addComment(newComment, movieId) {
+  addComment({ text, emoji, id }) {
+    const newComment = {
+      'comment': text,
+      'emotion': emoji,
+    };
     return this._load({
-      url: `comments/${movieId}`,
+      url: `comments/${id}`,
       method: Method.POST,
       body: JSON.stringify(newComment),
       headers: new Headers({'Content-Type': 'application/json'}),
