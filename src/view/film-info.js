@@ -231,16 +231,22 @@ export default class FilmPopup extends SmartView {
     this._state = FilmPopup.parseStateToData(this._state);
   }
 
-  _favoriteClickHandler() {
-    this._callback.favoriteClick();
+  _favoriteClickHandler(evt) {
+    evt.preventDefault();
+    const update = FilmPopup.parseStateToData(this._state);
+    this._callback.favoriteClick(update);
   }
 
-  _watchlistClickHandler() {
-    this._callback.watchlistClick();
+  _watchlistClickHandler(evt) {
+    evt.preventDefault();
+    const update = FilmPopup.parseStateToData(this._state);
+    this._callback.watchlistClick(update);
   }
 
-  _alreadyWatchedClickHandler() {
-    this._callback.alreadyWatchedClick();
+  _alreadyWatchedClickHandler(evt) {
+    evt.preventDefault();
+    const update = FilmPopup.parseStateToData(this._state);
+    this._callback.alreadyWatchedClick(update);
   }
 
   _emojiListClickHandler(evt) {

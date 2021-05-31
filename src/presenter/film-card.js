@@ -216,7 +216,7 @@ export default class FilmCard {
   _handlePopupAddFavoriteClick() {
     this._changeData(
       UserAction.UPDATE_FILM,
-      UpdateType.PATCH,
+      UpdateType.MINOR,
       Object.assign(
         {},
         this._filmCard,
@@ -234,13 +234,13 @@ export default class FilmCard {
     );
   }
 
-  _handlePopupAlreadyWatchedClick() {
+  _handlePopupAlreadyWatchedClick(data) {
     this._changeData(
       UserAction.UPDATE_FILM,
-      UpdateType.PATCH,
+      UpdateType.MINOR,
       Object.assign(
         {},
-        this._filmCard,
+        data,
         {
           userDetails:
           Object.assign(
@@ -255,13 +255,13 @@ export default class FilmCard {
     );
   }
 
-  _handlePopupWatchlistClick() {
+  _handlePopupWatchlistClick(data) {
     this._changeData(
       UserAction.UPDATE_FILM,
-      UpdateType.PATCH,
+      UpdateType.MINOR,
       Object.assign(
         {},
-        this._filmCard,
+        data,
         {
           userDetails:
           Object.assign(
