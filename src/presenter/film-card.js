@@ -213,20 +213,20 @@ export default class FilmCard {
     );
   }
 
-  _handlePopupAddFavoriteClick() {
+  _handlePopupAddFavoriteClick(data) {
     this._changeData(
       UserAction.UPDATE_FILM,
-      UpdateType.MINOR,
+      UpdateType.PATCH,
       Object.assign(
         {},
-        this._filmCard,
+        data,
         {
           userDetails:
           Object.assign(
             {},
-            this._filmCard.userDetails,
+            data.userDetails,
             {
-              isFavorite: !this._filmCard.userDetails.isFavorite,
+              isFavorite: !data.userDetails.isFavorite,
             },
           ),
         },
@@ -237,7 +237,7 @@ export default class FilmCard {
   _handlePopupAlreadyWatchedClick(data) {
     this._changeData(
       UserAction.UPDATE_FILM,
-      UpdateType.MINOR,
+      UpdateType.PATCH,
       Object.assign(
         {},
         data,
@@ -245,9 +245,9 @@ export default class FilmCard {
           userDetails:
           Object.assign(
             {},
-            this._filmCard.userDetails,
+            data.userDetails,
             {
-              isAlreadyWatched: !this._filmCard.userDetails.isAlreadyWatched,
+              isAlreadyWatched: !data.userDetails.isAlreadyWatched,
             },
           ),
         },
@@ -258,7 +258,7 @@ export default class FilmCard {
   _handlePopupWatchlistClick(data) {
     this._changeData(
       UserAction.UPDATE_FILM,
-      UpdateType.MINOR,
+      UpdateType.PATCH,
       Object.assign(
         {},
         data,
@@ -266,9 +266,9 @@ export default class FilmCard {
           userDetails:
           Object.assign(
             {},
-            this._filmCard.userDetails,
+            data.userDetails,
             {
-              isInWatchlist: !this._filmCard.userDetails.isInWatchlist,
+              isInWatchlist: !data.userDetails.isInWatchlist,
             },
           ),
         },

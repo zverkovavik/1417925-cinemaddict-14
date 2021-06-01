@@ -220,8 +220,8 @@ export default class FilmPopup extends SmartView {
   _escKeyDownHandler(evt) {
     if (isEscKeyDown(evt)) {
       evt.preventDefault();
-      this._callback.escKeyDown();
       this._state = FilmPopup.parseStateToData(this._state);
+      this._callback.escKeyDown();
     }
   }
 
