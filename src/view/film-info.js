@@ -1,5 +1,5 @@
 import SmartView from './smart';
-import { COMMENT_EMOTIONS, UserAction } from '../constants';
+import { COMMENT_EMOTIONS, UserAction, UpdateType } from '../constants';
 import dayjs from 'dayjs';
 import { isEnterCtrlKeyDown, isEscKeyDown, returnDurationInHoursMinutes } from '../utils/random-number-and-date';
 import { shake } from '../utils/common';
@@ -168,10 +168,12 @@ const createFilmPopupTemplate = (film, commentsArr) => {
 };
 
 export default class FilmPopup extends SmartView {
-  constructor(film, comments) {
+  constructor(film, comments, changeData) {
     super();
+    this._film = film;
     this._state = FilmPopup.parseDataToState(film);
     this._comments = comments;
+    this._changeData = changeData;
 
     this._closePopupClickHandler = this._closePopupClickHandler.bind(this);
     this._favoriteClickHandler = this._favoriteClickHandler.bind(this);
@@ -233,21 +235,93 @@ export default class FilmPopup extends SmartView {
 
   _favoriteClickHandler(evt) {
     evt.preventDefault();
-    const update = FilmPopup.parseStateToData(this._state);
-    this._callback.favoriteClick(update);
+    console.log(this._film);
+    // const update = FilmPopup.parseStateToData(this._state);
+    this._changeData(
+      UserAction.UPDATE_FILM,
+      UpdateType.PATCH,
+      Object.assign(
+        {},
+        this._film,
+        {
+          userDetails:
+          Object.assign(
+            {},
+            this._film.userDetails,
+            {
+              isFavorite: !this._film.userDetails.isFavorite,
+            },
+          ),
+        },
+      ),
+    );
   }
 
   _watchlistClickHandler(evt) {
     evt.preventDefault();
-    const update = FilmPopup.parseStateToData(this._state);
-    this._callback.watchlistClick(update);
+    console.log(this._film);
+    // const update = FilmPopup.parseStateToData(this._state);
+    this._changeData(
+      UserAction.UPDATE_FILM,
+      UpdateType.PATCH,
+      Object.assign(
+        {},
+        this._film,
+        {
+          userDetails:
+          Object.assign(
+            {},
+            this._film.userDetails,
+            {
+              isInWatchlist: !this._film.userDetails.isInWatchlist,
+            },
+          ),
+        },
+      ),
+    );
   }
 
   _alreadyWatchedClickHandler(evt) {
     evt.preventDefault();
-    const update = FilmPopup.parseStateToData(this._state);
-    this._callback.alreadyWatchedClick(update);
+    console.log(this._film);
+    // const update = FilmPopup.parseStateToData(this._state);
+    this._changeData(
+      UserAction.UPDATE_FILM,
+      UpdateType.PATCH,
+      Object.assign(
+        {},
+        this._film,
+        {
+          userDetails:
+          Object.assign(
+            {},
+            this._film.userDetails,
+            {
+              isAlreadyWatched: !this._film.userDetails.isAlreadyWatched,
+            },
+          ),
+        },
+      ),
+    );
   }
+
+  // _favoriteClickHandler(evt) {
+  //   evt.preventDefault();
+  //   const update = FilmPopup.parseStateToData(this._state);
+  //   this._callback.favoriteClick(update);
+  // }
+
+  // _watchlistClickHandler(evt) {
+  //   evt.preventDefault();
+  //   const update = FilmPopup.parseStateToData(this._state);
+  //   this._callback.watchlistClick(update);
+  // }
+
+  // _alreadyWatchedClickHandler(evt) {
+  //   evt.preventDefault();
+  //   const update = FilmPopup.parseStateToData(this._state);
+  //   this._callback.alreadyWatchedClick(update);
+  // }
 
   _emojiListClickHandler(evt) {
     if (!evt.target.src) {

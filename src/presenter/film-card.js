@@ -21,9 +21,9 @@ export default class FilmCard {
     this._handleAddFavoriteClick = this._handleAddFavoriteClick.bind(this);
     this._handleAlreadyWatchedClick = this._handleAlreadyWatchedClick.bind(this);
 
-    this._handlePopupWatchlistClick = this._handlePopupWatchlistClick.bind(this);
-    this._handlePopupAddFavoriteClick = this._handlePopupAddFavoriteClick.bind(this);
-    this._handlePopupAlreadyWatchedClick = this._handlePopupAlreadyWatchedClick.bind(this);
+    this._handleWatchlistClick = this._handleWatchlistClick.bind(this);
+    this._handleAddFavoriteClick = this._handleAddFavoriteClick.bind(this);
+    this._handleAlreadyWatchedClick = this._handleAlreadyWatchedClick.bind(this);
     this._handleDeleteCommentClick = this._handleDeleteCommentClick.bind(this);
     this._handleSubmitCommentKeyDown = this._handleSubmitCommentKeyDown.bind(this);
     this._mode = Mode.DEFAULT;
@@ -41,7 +41,7 @@ export default class FilmCard {
 
     this._api.getComments(filmCard.id).then((comments) => {
       this._commentsModel.setComments(comments);
-      this._filmPopupComponent = new FilmPopupView(filmCard, comments);
+      this._filmPopupComponent = new FilmPopupView(filmCard, comments, this._changeData);
       this._filmPopupComponent.updateElement();
     })
       .catch(this._commentsModel.setComments([]));
@@ -113,9 +113,9 @@ export default class FilmCard {
   }
 
   _setPopupHandlers() {
-    this._filmPopupComponent.setAlreadyWatchedClickHandler(this._handlePopupAlreadyWatchedClick);
-    this._filmPopupComponent.setFavoriteClickHandler(this._handlePopupAddFavoriteClick);
-    this._filmPopupComponent.setWatchlistClickHandler(this._handlePopupWatchlistClick);
+    this._filmPopupComponent.setAlreadyWatchedClickHandler(this._handleAlreadyWatchedClick);
+    this._filmPopupComponent.setFavoriteClickHandler(this._handleAddFavoriteClick);
+    this._filmPopupComponent.setWatchlistClickHandler(this._handleWatchlistClick);
     this._filmPopupComponent.setCommentDeleteClickHandler(this._handleDeleteCommentClick);
     this._filmPopupComponent.setSubmitKeyDownHandler(this._handleSubmitCommentKeyDown);
     this._filmPopupComponent.setClosePopupClickHandler(this._closeHandler);
@@ -213,68 +213,68 @@ export default class FilmCard {
     );
   }
 
-  _handlePopupAddFavoriteClick(data) {
-    this._changeData(
-      UserAction.UPDATE_FILM,
-      UpdateType.PATCH,
-      Object.assign(
-        {},
-        data,
-        {
-          userDetails:
-          Object.assign(
-            {},
-            data.userDetails,
-            {
-              isFavorite: !data.userDetails.isFavorite,
-            },
-          ),
-        },
-      ),
-    );
-  }
+  // _handlePopupAddFavoriteClick(data) {
+  //   this._changeData(
+  //     UserAction.UPDATE_FILM,
+  //     UpdateType.PATCH,
+  //     Object.assign(
+  //       {},
+  //       data,
+  //       {
+  //         userDetails:
+  //         Object.assign(
+  //           {},
+  //           data.userDetails,
+  //           {
+  //             isFavorite: !data.userDetails.isFavorite,
+  //           },
+  //         ),
+  //       },
+  //     ),
+  //   );
+  // }
 
-  _handlePopupAlreadyWatchedClick(data) {
-    this._changeData(
-      UserAction.UPDATE_FILM,
-      UpdateType.PATCH,
-      Object.assign(
-        {},
-        data,
-        {
-          userDetails:
-          Object.assign(
-            {},
-            data.userDetails,
-            {
-              isAlreadyWatched: !data.userDetails.isAlreadyWatched,
-            },
-          ),
-        },
-      ),
-    );
-  }
+  // _handlePopupAlreadyWatchedClick(data) {
+  //   this._changeData(
+  //     UserAction.UPDATE_FILM,
+  //     UpdateType.PATCH,
+  //     Object.assign(
+  //       {},
+  //       data,
+  //       {
+  //         userDetails:
+  //         Object.assign(
+  //           {},
+  //           data.userDetails,
+  //           {
+  //             isAlreadyWatched: !data.userDetails.isAlreadyWatched,
+  //           },
+  //         ),
+  //       },
+  //     ),
+  //   );
+  // }
 
-  _handlePopupWatchlistClick(data) {
-    this._changeData(
-      UserAction.UPDATE_FILM,
-      UpdateType.PATCH,
-      Object.assign(
-        {},
-        data,
-        {
-          userDetails:
-          Object.assign(
-            {},
-            data.userDetails,
-            {
-              isInWatchlist: !data.userDetails.isInWatchlist,
-            },
-          ),
-        },
-      ),
-    );
-  }
+  // _handlePopupWatchlistClick(data) {
+  //   this._changeData(
+  //     UserAction.UPDATE_FILM,
+  //     UpdateType.PATCH,
+  //     Object.assign(
+  //       {},
+  //       data,
+  //       {
+  //         userDetails:
+  //         Object.assign(
+  //           {},
+  //           data.userDetails,
+  //           {
+  //             isInWatchlist: !data.userDetails.isInWatchlist,
+  //           },
+  //         ),
+  //       },
+  //     ),
+  //   );
+  // }
 
   _handleDeleteCommentClick(update) {
     this._changeData(
