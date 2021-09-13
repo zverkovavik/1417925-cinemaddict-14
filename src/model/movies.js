@@ -41,8 +41,9 @@ export default class Movies extends Observer {
     this._notify(updateType, update);
   }
 
-  deleteComment(updateType, update, commentId) {
-    const film = this._movies.find((film) => film.id === update.id);
+  deleteComment(updateType, update) {
+    const { filmId, commentId } = update;
+    const film = this._movies.find((film) => film.id === filmId);
     film.comments = film.comments.map((element) => element !== commentId);
 
     this._notify(updateType);

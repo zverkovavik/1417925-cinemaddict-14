@@ -8,7 +8,6 @@ export default class Comments extends Observer {
   setComments(comments) {
     this._comments = comments.slice();
 
-    // this._notify(updateType);
   }
 
   getComments() {

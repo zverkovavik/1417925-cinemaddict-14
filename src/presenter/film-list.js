@@ -5,13 +5,12 @@ import FilmCardContainerView from '../view/film-container';
 import ShowMoreButtonView from '../view/show-more-button';
 import UserStaticticsView from '../view/user-statictics';
 import { render, RenderPosition, removeComponent, replace } from '../utils/render';
-import { FilmCardNumber, SortType, Title,  UserAction, UpdateType, FilterType } from '../constants';
+import { FilmCardNumber, SortType, Title,  UserAction, UpdateType, FilterType, State } from '../constants';
 import FilmCardPresenter from './film-card';
 import FilmsView from '../view/films';
 import { sortByDate, sortByRating, sortByComments } from '../utils/common';
 import { filter } from '../utils/filter';
 import LoadingView from '../view/loading';
-
 export default class FilmList {
   constructor(mainBlock, moviesModel, filterModel, api) {
 
@@ -66,9 +65,6 @@ export default class FilmList {
     return filteredMovies;
   }
 
-  _getComments() {
-    return this._commentsModel.getComments();
-  }
   _renderLoading() {
     render(this._filmsBlockContainer, this._loadingComponent, RenderPosition.BEFOREEND);
   }
@@ -82,7 +78,7 @@ export default class FilmList {
     this._sortComponent.setSortTypeChangeHandler(this._handleSortTypeChange);
   }
 
-  _handleViewAction(actionType, updateType, update, id = null) {
+  _handleViewAction(actionType, updateType, update) {
     switch (actionType) {
       case UserAction.UPDATE_FILM:
         this._api.updateMovie(update).then((response) => {
@@ -90,16 +86,22 @@ export default class FilmList {
         });
         break;
       case UserAction.ADD_COMMENT:
-        this._api.addComment(update, id).then((response) => {
-          // console.log(response);
+        this._filmCardPresenter[update.id].setViewState(State.SAVING);
+        this._api.addComment(update).then((response) => {
           this._moviesModel.addComment(updateType, response);
-        });
-        // console.log(update);
+        })
+          .catch(() => {
+            this._filmCardPresenter[update.id].setViewState(State.ABORTING, UserAction.ADD_COMMENT);
+          });
         break;
       case UserAction.DELETE_COMMENT:
-        this._api.deleteComment(id).then(() => {
-          this._moviesModel.deleteComment(updateType, update, id);
-        });
+        this._filmCardPresenter[update.filmId].setViewState(State.DELETING, null, update.commentId);
+        this._api.deleteComment(update.commentId).then(() => {
+          this._moviesModel.deleteComment(updateType, update);
+        })
+          .catch(() => {
+            this._filmCardPresenter[update.filmId].setViewState(State.ABORTING, UserAction.DELETE_COMMENT, update.commentId);
+          });
         break;
     }
   }
@@ -114,6 +116,7 @@ export default class FilmList {
         this._renderBoard();
         break;
       case UpdateType.MAJOR:
+        this._currentSortType = SortType.DEFAULT;
         this.clearBoard({resetRenderedFilmCount: true, _currentSortType: true});
         if(this._filterModel.getFilter() === FilterType.STATISTICS) {
           this._renderStats();
