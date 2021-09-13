@@ -235,7 +235,6 @@ export default class FilmPopup extends SmartView {
 
   _favoriteClickHandler(evt) {
     evt.preventDefault();
-    console.log(this._film);
     // const update = FilmPopup.parseStateToData(this._state);
     this._changeData(
       UserAction.UPDATE_FILM,
@@ -259,7 +258,6 @@ export default class FilmPopup extends SmartView {
 
   _watchlistClickHandler(evt) {
     evt.preventDefault();
-    console.log(this._film);
     // const update = FilmPopup.parseStateToData(this._state);
     this._changeData(
       UserAction.UPDATE_FILM,
@@ -283,7 +281,6 @@ export default class FilmPopup extends SmartView {
 
   _alreadyWatchedClickHandler(evt) {
     evt.preventDefault();
-    console.log(this._film);
     // const update = FilmPopup.parseStateToData(this._state);
     this._changeData(
       UserAction.UPDATE_FILM,
