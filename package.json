@@ -21,7 +21,7 @@
     "node": "10"
   },
   "dependencies": {
-    "chart.js": "3.8.2",
+    "chart.js": "3.9.0",
     "chartjs-plugin-datalabels": "2.0.0",
     "he": "1.2.0"
   }
