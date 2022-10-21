@@ -10,7 +10,7 @@
     "start": "webpack-dev-server --open"
   },
   "devDependencies": {
-    "dayjs": "1.11.5",
+    "dayjs": "1.11.6",
     "eslint": "8.23.1",
     "eslint-config-htmlacademy": "6.0.0",
     "webpack": "5.74.0",
