@@ -22,7 +22,7 @@
   },
   "dependencies": {
     "chart.js": "3.9.1",
-    "chartjs-plugin-datalabels": "2.1.0",
+    "chartjs-plugin-datalabels": "2.2.0",
     "he": "1.2.0"
   }
 }
